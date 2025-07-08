@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        background: #1a1a1a;
+        color: #e6e6e6;
+        font-family: 'Roboto', sans-serif;
+        overflow: hidden;
+        position: relative;
+      }
+      .title {
+        color: #ff6b35;
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .content {
+        font-size: 20px;
+        line-height: 1.5;
+      }
+      .accent {
+        color: #3a86ff;
+      }
+      .image-container {
+        width: 600px;
+        height: 400px;
+        overflow: hidden;
+        border: 2px solid #3a86ff;
+        border-radius: 5px;
+      }
+      .chart-container {
+        height: 300px;
+        width: 100%;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container mx-auto p-10 flex flex-col">
+      <h1 class="title text-center mb-8">The Scorched Earth: A New Reality</h1>
+      
+      <div class="flex flex-row justify-between items-center">
+        <div class="content w-2/5">
+          <p class="mb-4">Without the ozone layer, Earth's surface becomes <span class="accent">uninhabitable</span>.</p>
+          <p class="mb-4">UV index regularly exceeds <span class="accent">40+</span>, compared to today's extreme of 11+.</p>
+          <p class="mb-4">Surface temperatures rise to <span class="accent">lethal levels</span>, with dramatic fluctuations.</p>
+          <p class="mb-4">Exposed skin burns within <span class="accent">minutes</span>, and plant life cannot survive.</p>
+          <p class="mb-4">Water sources evaporate rapidly, creating vast <span class="accent">desert landscapes</span>.</p>
+        </div>
+        
+        <div class="image-container">
+          <img src="https://private-us-east-1.manuscdn.com/sessionFile/hrd54eL8zbwrF0p6v8DOtN/sandbox/slides_resource_in4zuuhfslptc6qejl4es-ae271777-e2b-prod-aws_1751974324111_na1fn_L2hvbWUvdWJ1bnR1L3VwbG9hZC9zZWFyY2hfaW1hZ2VzL0xqeVFzSDJ0b1c0MQ.jpg?x-oss-process=image/resize,w_1560,h_1560/format,webp&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvaHJkNTRlTDh6YndyRjBwNnY4RE90Ti9zYW5kYm94L3NsaWRlc19yZXNvdXJjZV9pbjR6dXVoZnNscHRjNnFlamw0ZXMtYWUyNzE3NzctZTJiLXByb2QtYXdzXzE3NTE5NzQzMjQxMTFfbmExZm5fTDJodmJXVXZkV0oxYm5SMUwzVndiRzloWkM5elpXRnlZMmhmYVcxaFoyVnpMMHhxZVZGelNESjBiMWMwTVEuanBnP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTU2MCxoXzE1NjAvZm9ybWF0LHdlYnAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=CtDduaPnYC4GLvzTQlfY7hPk35oiM1kDLZO1newyD1g9B7rhnFPy8GhGZzUADcqxjG6qYMv3a2WQ2ygHnZuZxlujjSeDCXg982jaL29PA4BZUkYNc-PQd12SgpXz3amo~S2ev32uI7sSkCjHNtC1kBLxkVTOpSqhRRGzwnh4WdIDlxHG0wlRg90cYSItEmKIf0f6oG9pCg58x4W~Y3jU4S5R6iqABFymFBs4b724YCUhjFNxycrAqz7QfEz-rbPe1L31TjO8ff-DD4lnkwi6Zft8hPoJxhjyLcXCUiRnxhPjOLTXQs2Bh6RB1A1PaIVMwTHbhHTPwZixqfL57~vpGg__" alt="Scorched Earth Landscape" width="600" height="400" class="object-cover">
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <canvas id="uvChart"></canvas>
+      </div>
+      
+      <script>
+        const ctx = document.getElementById('uvChart').getContext('2d');
+        const uvChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Current Safe', 'Current Extreme', 'Future Moderate', 'Future Extreme'],
+            datasets: [{
+              label: 'UV Index Levels',
+              data: [3, 11, 25, 40],
+              backgroundColor: [
+                '#3a86ff',
+                '#ff9e00',
+                '#ff6b35',
+                '#ff0000'
+              ],
+              borderColor: [
+                '#3a86ff',
+                '#ff9e00',
+                '#ff6b35',
+                '#ff0000'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: '#333333'
+                },
+                ticks: {
+                  color: '#e6e6e6'
+                },
+                title: {
+                  display: true,
+                  text: 'UV Index',
+                  color: '#e6e6e6'
+                }
+              },
+              x: {
+                grid: {
+                  color: '#333333'
+                },
+                ticks: {
+                  color: '#e6e6e6'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  color: '#e6e6e6'
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) {
+                      label += ': ';
+                    }
+                    if (context.parsed.y !== null) {
+                      label += context.parsed.y;
+                    }
+                    return label;
+                  },
+                  afterLabel: function(context) {
+                    const index = context.dataIndex;
+                    const effects = [
+                      'Minimal sun protection needed',
+                      'Skin burns in 15-25 minutes',
+                      'Skin burns in 2-5 minutes',
+                      'Skin burns in seconds'
+                    ];
+                    return 'Effect: ' + effects[index];
+                  }
+                }
+              }
+            }
+          }
+        });
+      </script>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        background: #1a1a1a;
+        color: #e6e6e6;
+        font-family: 'Roboto', sans-serif;
+        overflow: hidden;
+        position: relative;
+      }
+      .title {
+        color: #ff6b35;
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .content {
+        font-size: 20px;
+        line-height: 1.5;
+      }
+      .accent {
+        color: #3a86ff;
+      }
+      .image-container {
+        width: 600px;
+        height: 400px;
+        overflow: hidden;
+        border: 2px solid #3a86ff;
+        border-radius: 5px;
+      }
+      .chart-container {
+        height: 300px;
+        width: 100%;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container mx-auto p-10 flex flex-col">
+      <h1 class="title text-center mb-8">Technology's Failure: Unprepared for Tomorrow</h1>
+      
+      <div class="flex flex-row justify-between items-center">
+        <div class="content w-2/5">
+          <p class="mb-4">Current technology is <span class="accent">woefully inadequate</span> for a world without ozone.</p>
+          <p class="mb-4">Solar panels degrade rapidly under extreme UV, losing <span class="accent">efficiency</span> when needed most.</p>
+          <p class="mb-4">Building materials aren't designed to withstand <span class="accent">constant radiation exposure</span>.</p>
+          <p class="mb-4">Agricultural systems rely on <span class="accent">surface conditions</span> that no longer exist.</p>
+          <p class="mb-4">Medical technology is unprepared for <span class="accent">new radiation-related diseases</span>.</p>
+          <p class="mb-4">Transportation infrastructure remains <span class="accent">surface-dependent</span>, becoming unusable.</p>
+        </div>
+        
+        <div class="image-container">
+          <img src="https://private-us-east-1.manuscdn.com/sessionFile/hrd54eL8zbwrF0p6v8DOtN/sandbox/slides_resource_in4zuuhfslptc6qejl4es-ae271777-e2b-prod-aws_1751974369776_na1fn_L2hvbWUvdWJ1bnR1L3VwbG9hZC9zZWFyY2hfaW1hZ2VzL2ZMbHZrdEpubnhHSQ.jpg?x-oss-process=image/resize,w_1560,h_1560/format,webp&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvaHJkNTRlTDh6YndyRjBwNnY4RE90Ti9zYW5kYm94L3NsaWRlc19yZXNvdXJjZV9pbjR6dXVoZnNscHRjNnFlamw0ZXMtYWUyNzE3NzctZTJiLXByb2QtYXdzXzE3NTE5NzQzNjk3NzZfbmExZm5fTDJodmJXVXZkV0oxYm5SMUwzVndiRzloWkM5elpXRnlZMmhmYVcxaFoyVnpMMlpNYkhacmRFcHVibmhIU1EuanBnP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTU2MCxoXzE1NjAvZm9ybWF0LHdlYnAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=PfAwWakgAQTldzReAV94JOZ7lYPNk6UAziYzQwgL2BHjF~bM6ZP3Lym7fMgrl2ZeT54SRcs-LiQaPSq3f~7ghXQ1Hk73sEVbh8dS4BzmRrd1fh5V2C0T2Ltsw9nAy1wQcxruwHEzcf2-yKa1DhyFn2U5-DRMg01~0z35cdL-9~Ij9~CzKGR9mJ93qGfsETcHdyFLZuMUCv0v-pGyXMUlb7RhRYUOv2E~b4XeOuZasuIFmdnR8l1CxjpgV1iKkRbbw6DumHfImac-xssZ0DuHWx830ZDblZB5cXxeOwuEVxa0aSITFTbXGHA8P-hAYUUadLUZGJtHT5k~wcpG~xUTeQ__" alt="Futuristic Bunker Technology" width="600" height="400" class="object-cover">
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <canvas id="techChart"></canvas>
+      </div>
+      
+      <script>
+        const ctx = document.getElementById('techChart').getContext('2d');
+        const techChart = new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: ['UV Resistance', 'Underground Adaptability', 'Resource Efficiency', 'Self-Sustainability', 'Radiation Shielding', 'Long-term Durability'],
+            datasets: [{
+              label: 'Current Technology',
+              data: [30, 25, 40, 35, 45, 50],
+              backgroundColor: 'rgba(255, 107, 53, 0.2)',
+              borderColor: '#ff6b35',
+              borderWidth: 2,
+              pointBackgroundColor: '#ff6b35'
+            }, {
+              label: 'Required Technology',
+              data: [90, 95, 85, 90, 95, 90],
+              backgroundColor: 'rgba(58, 134, 255, 0.2)',
+              borderColor: '#3a86ff',
+              borderWidth: 2,
+              pointBackgroundColor: '#3a86ff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                angleLines: {
+                  color: '#333333'
+                },
+                grid: {
+                  color: '#333333'
+                },
+                pointLabels: {
+                  color: '#e6e6e6'
+                },
+                ticks: {
+                  color: '#e6e6e6',
+                  backdropColor: '#1a1a1a'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  color: '#e6e6e6'
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) {
+                      label += ': ';
+                    }
+                    if (context.parsed.r !== null) {
+                      label += context.parsed.r + '%';
+                    }
+                    return label;
+                  }
+                }
+              }
+            }
+          }
+        });
+      </script>
+    </div>
+  </body>
+</html>
+

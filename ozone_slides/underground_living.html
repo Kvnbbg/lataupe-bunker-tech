@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        background: #1a1a1a;
+        color: #e6e6e6;
+        font-family: 'Roboto', sans-serif;
+        overflow: hidden;
+        position: relative;
+      }
+      .title {
+        color: #ff6b35;
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .content {
+        font-size: 20px;
+        line-height: 1.5;
+      }
+      .accent {
+        color: #3a86ff;
+      }
+      .image-container {
+        width: 600px;
+        height: 400px;
+        overflow: hidden;
+        border: 2px solid #3a86ff;
+        border-radius: 5px;
+      }
+      .small-image {
+        width: 200px;
+        height: 150px;
+        overflow: hidden;
+        border: 1px solid #3a86ff;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container mx-auto p-10 flex flex-col">
+      <h1 class="title text-center mb-8">Life Underground: Our New Home</h1>
+      
+      <div class="flex flex-row justify-between items-center">
+        <div class="content w-2/5">
+          <p class="mb-4">Humanity is forced to retreat <span class="accent">beneath the surface</span>, like moles seeking refuge.</p>
+          <p class="mb-4">Underground cities and tunnel networks become our <span class="accent">new habitat</span>.</p>
+          <p class="mb-4">Artificial lighting mimics day/night cycles to maintain <span class="accent">circadian rhythms</span>.</p>
+          <p class="mb-4">Water recycling and vertical farming provide <span class="accent">sustainable resources</span>.</p>
+          <p class="mb-4">Psychological challenges of confined living lead to new <span class="accent">social structures</span>.</p>
+          <p class="mb-4">Surface excursions require <span class="accent">specialized protective gear</span>, limited to essential tasks only.</p>
+        </div>
+        
+        <div class="image-container">
+          <img src="https://private-us-east-1.manuscdn.com/sessionFile/hrd54eL8zbwrF0p6v8DOtN/sandbox/slides_resource_in4zuuhfslptc6qejl4es-ae271777-e2b-prod-aws_1751974345030_na1fn_L2hvbWUvdWJ1bnR1L3VwbG9hZC9zZWFyY2hfaW1hZ2VzL21DNUFqMldXSFFSUA.jpg?x-oss-process=image/resize,w_1560,h_1560/format,webp&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvaHJkNTRlTDh6YndyRjBwNnY4RE90Ti9zYW5kYm94L3NsaWRlc19yZXNvdXJjZV9pbjR6dXVoZnNscHRjNnFlamw0ZXMtYWUyNzE3NzctZTJiLXByb2QtYXdzXzE3NTE5NzQzNDUwMzBfbmExZm5fTDJodmJXVXZkV0oxYm5SMUwzVndiRzloWkM5elpXRnlZMmhmYVcxaFoyVnpMMjFETlVGcU1sZFhTRkZTVUEuanBnP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTU2MCxoXzE1NjAvZm9ybWF0LHdlYnAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=YGq~dfmw4XsdS6tQuftiO-V59-fUz-Lc5uj2XDLsRZV7g7KdPtAt5uAXJwzOEJjCKGsFy8-ip8fwZTkSs1CN9Y6FrOoWXPuY0tgj~eNy5Vh9V21~FBKMCALQRuh-NAWB1PBUoVZCMvtWXlW6jVbsep5r7-JCQ3kPRWdB8qhrFSDK2D6sZCHLa9FMTcYsHHsOgN2mPDWzprFdra7hWCRsW-91aXmmk3X3BXxbxz4M3hCqu4zAwPO6mvAAXbKDckum5UraHShkZ35rGFgzivs4~9YHuMlb61aXOp2SUlzVgp-9nC75uwNXEnob3tfndDIORKCqoa0fZU3akPUfkkUCdg__" alt="Underground City Concept" width="600" height="400" class="object-cover">
+        </div>
+      </div>
+      
+      <div class="mt-8 flex justify-between items-center">
+        <div class="small-image">
+          <img src="https://private-us-east-1.manuscdn.com/sessionFile/hrd54eL8zbwrF0p6v8DOtN/sandbox/slides_resource_in4zuuhfslptc6qejl4es-ae271777-e2b-prod-aws_1751974345030_na1fn_L2hvbWUvdWJ1bnR1L3VwbG9hZC9zZWFyY2hfaW1hZ2VzLzl4SmoxazJqalY5Mg.jpg?x-oss-process=image/resize,w_1560,h_1560/format,webp&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvaHJkNTRlTDh6YndyRjBwNnY4RE90Ti9zYW5kYm94L3NsaWRlc19yZXNvdXJjZV9pbjR6dXVoZnNscHRjNnFlamw0ZXMtYWUyNzE3NzctZTJiLXByb2QtYXdzXzE3NTE5NzQzNDUwMzBfbmExZm5fTDJodmJXVXZkV0oxYm5SMUwzVndiRzloWkM5elpXRnlZMmhmYVcxaFoyVnpMemw0U21veGF6SnFhbFk1TWcuanBnP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTU2MCxoXzE1NjAvZm9ybWF0LHdlYnAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=T59TGgK5mFpH43y6a3upeyFQYxxnvHh-Ti1RpCx2z5rOFu2mzgvbLPvCm5YFNMhgbDglwq3RCG-K8Q8-wnOHdm7xbDlzFcnp-xX75Nn9A-FrFTW394H-SvYGSTyNAKNI3bmcd63wFKVPFutBA4uLhbc~uE01GSY~w65ajBm29MS2gHe4vLPpR-so-5mu8r~TQwq10Z6HvK2ZUsJAYornbNNqKCTnqoOXMH~WYESQNIdwYuwL0YRe6UiWfmeJo1fN3ugI6En7S99BrTRW1IlwRkfqFXx-fkuNsgeFQSwyTC3zmPZhyUPpIEJAqrzE99y8NuCraah9uiCrsk4M1C9BMQ__" alt="Mole Animal" width="200" height="150" class="object-cover">
+        </div>
+        
+        <div class="w-3/5 bg-gray-800 p-4 rounded-lg">
+          <p class="text-center"><i class="fas fa-lightbulb text-yellow-300 mr-2"></i>Like moles that evolved for underground living, humans must adapt to subterranean existence - developing enhanced low-light vision, efficient resource usage, and complex tunnel navigation systems.</p>
+        </div>
+        
+        <div class="small-image">
+          <img src="https://private-us-east-1.manuscdn.com/sessionFile/hrd54eL8zbwrF0p6v8DOtN/sandbox/slides_resource_in4zuuhfslptc6qejl4es-ae271777-e2b-prod-aws_1751974345030_na1fn_L2hvbWUvdWJ1bnR1L2dlbmVyYXRlZF9pbWFnZXMvdW5kZXJncm91bmRfYnVua2VyX3ZpZXc.png?x-oss-process=image/resize,w_1560,h_1560/format,webp&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvaHJkNTRlTDh6YndyRjBwNnY4RE90Ti9zYW5kYm94L3NsaWRlc19yZXNvdXJjZV9pbjR6dXVoZnNscHRjNnFlamw0ZXMtYWUyNzE3NzctZTJiLXByb2QtYXdzXzE3NTE5NzQzNDUwMzBfbmExZm5fTDJodmJXVXZkV0oxYm5SMUwyZGxibVZ5WVhSbFpGOXBiV0ZuWlhNdmRXNWtaWEpuY205MWJtUmZZblZ1YTJWeVgzWnBaWGMucG5nP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTU2MCxoXzE1NjAvZm9ybWF0LHdlYnAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=l8FO5DREhxg5w5SfdVrfCvQhLB-xO-wNAhtQhlRIqbZ-aEYQT9cRwcpw7PUX6Dh6OGu8lzjLqabPDZ0K6pRC~1wm1CY-Z~MF~zDPMz2XtEfIVY9heN3iIaKtyx4~5ZKhcOplAFR4xlrToElLmO88GXhFEMSKS2LKDGiWjkI2IMRFssYMSB~rmuS53KT53oyGTTk7~HOTXR8YYliJbUZovWHoZVNgJ-WrJ3o0IgLdKh6ndxyPY98fwE7z2hwBLFaPM5enk7k24z~ilR7rmkM3aHHzt3rhrIIYRPXGvMhxnoJDhjjDEfF0AsMP4P4nQA-NcNkrX4xjk5kWB5k1dOEUeQ__" alt="Human in Underground Bunker" width="200" height="150" class="object-cover">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
