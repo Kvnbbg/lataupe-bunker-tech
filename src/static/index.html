@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lataupe Bunker Tech - Système de Surveillance</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Configuration Tailwind personnalisée -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bunker: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 50%, #0369a1 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-normal { background-color: #10b981; }
+        .status-warning { background-color: #f59e0b; }
+        .status-critical { background-color: #ef4444; }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-white">🏠 Lataupe Bunker Tech</h1>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4">
+                            <button onclick="showSection('dashboard')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:bg-opacity-20 transition-colors">
+                                📊 Tableau de Bord
+                            </button>
+                            <button onclick="showSection('alerts')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:bg-opacity-20 transition-colors">
+                                🚨 Alertes
+                            </button>
+                            <button onclick="showSection('emergency')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:bg-opacity-20 transition-colors">
+                                📡 Messages d'Urgence
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="user-info" class="text-sm text-white opacity-75"></span>
+                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Section de Connexion -->
+    <div id="login-section" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <h2 class="mt-6 text-3xl font-extrabold text-white">
+                    Accès au Bunker
+                </h2>
+                <p class="mt-2 text-sm text-gray-300">
+                    Système de surveillance environnementale
+                </p>
+            </div>
+            <form class="mt-8 space-y-6" onsubmit="login(event)">
+                <div class="rounded-md shadow-sm space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
+                            Nom d'utilisateur
+                        </label>
+                        <input id="username" name="username" type="text" required 
+                               class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-400 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-bunker-500 focus:border-bunker-500 focus:z-10 sm:text-sm"
+                               placeholder="Entrez votre nom d'utilisateur">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                            Mot de passe
+                        </label>
+                        <input id="password" name="password" type="password" required 
+                               class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-400 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-bunker-500 focus:border-bunker-500 focus:z-10 sm:text-sm"
+                               placeholder="Entrez votre mot de passe">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-bunker-600 hover:bg-bunker-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bunker-500 transition-colors">
+                        Se connecter
+                    </button>
+                </div>
+                
+                <div class="text-center text-sm text-gray-400">
+                    <p>Comptes de test :</p>
+                    <p>Admin: admin / admin123</p>
+                    <p>Résident: resident / resident123</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Section Principale (cachée par défaut) -->
+    <div id="main-content" class="hidden">
+        <!-- Tableau de Bord -->
+        <div id="dashboard-section" class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <!-- Statut du Système -->
+            <div class="mb-6">
+                <div class="glass-effect rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-white">Statut du Système</h2>
+                        <div id="system-status" class="flex items-center">
+                            <span class="status-indicator status-normal"></span>
+                            <span class="text-green-400 font-medium">Système Opérationnel</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                            <div class="text-sm text-gray-400">Dernière Mise à Jour</div>
+                            <div id="last-update" class="text-lg font-semibold text-white">--</div>
+                        </div>
+                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                            <div class="text-sm text-gray-400">Alertes Actives</div>
+                            <div id="active-alerts-count" class="text-lg font-semibold text-white">0</div>
+                        </div>
+                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                            <div class="text-sm text-gray-400">Alertes Critiques</div>
+                            <div id="critical-alerts-count" class="text-lg font-semibold text-red-400">0</div>
+                        </div>
+                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                            <div class="text-sm text-gray-400">Fraîcheur des Données</div>
+                            <div id="data-freshness" class="text-lg font-semibold text-green-400">Récentes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Données Environnementales -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Température et Humidité -->
+                <div class="glass-effect rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Température & Humidité</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-400" id="temperature-value">--°C</div>
+                            <div class="text-sm text-gray-400">Température</div>
+                            <div id="temperature-trend" class="text-xs mt-1">--</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-cyan-400" id="humidity-value">--%</div>
+                            <div class="text-sm text-gray-400">Humidité</div>
+                            <div id="humidity-trend" class="text-xs mt-1">--</div>
+                        </div>
+                    </div>
+                    <canvas id="temp-humidity-chart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Qualité de l'Air -->
+                <div class="glass-effect rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Qualité de l'Air</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-400" id="air-quality-value">--/100</div>
+                            <div class="text-sm text-gray-400">Indice Qualité</div>
+                            <div id="air-quality-trend" class="text-xs mt-1">--</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-purple-400" id="oxygen-value">--%</div>
+                            <div class="text-sm text-gray-400">Oxygène</div>
+                            <div id="oxygen-trend" class="text-xs mt-1">--</div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-orange-400" id="co2-value">-- PPM</div>
+                            <div class="text-sm text-gray-400">CO2</div>
+                            <div id="co2-trend" class="text-xs mt-1">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contrôles -->
+            <div class="glass-effect rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-white mb-4">Contrôles du Système</h3>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="refreshData()" class="bg-bunker-600 hover:bg-bunker-700 px-4 py-2 rounded-lg text-white transition-colors">
+                        🔄 Actualiser les Données
+                    </button>
+                    <button onclick="generateTestData()" class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg text-white transition-colors">
+                        🧪 Générer Données Test
+                    </button>
+                    <button onclick="simulateEmergency('ventilation_failure')" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white transition-colors">
+                        ⚠️ Simuler Panne Ventilation
+                    </button>
+                    <button onclick="simulateEmergency('heating_failure')" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white transition-colors">
+                        🌡️ Simuler Panne Chauffage
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Alertes -->
+        <div id="alerts-section" class="hidden max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="glass-effect rounded-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Gestion des Alertes</h2>
+                    <button onclick="refreshAlerts()" class="bg-bunker-600 hover:bg-bunker-700 px-4 py-2 rounded-lg text-white transition-colors">
+                        🔄 Actualiser
+                    </button>
+                </div>
+                
+                <!-- Résumé des Alertes -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-red-900 bg-opacity-50 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-red-400" id="critical-count">0</div>
+                        <div class="text-sm text-gray-300">Critiques</div>
+                    </div>
+                    <div class="bg-orange-900 bg-opacity-50 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-orange-400" id="high-count">0</div>
+                        <div class="text-sm text-gray-300">Élevées</div>
+                    </div>
+                    <div class="bg-yellow-900 bg-opacity-50 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-yellow-400" id="medium-count">0</div>
+                        <div class="text-sm text-gray-300">Moyennes</div>
+                    </div>
+                    <div class="bg-blue-900 bg-opacity-50 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-blue-400" id="low-count">0</div>
+                        <div class="text-sm text-gray-300">Faibles</div>
+                    </div>
+                </div>
+
+                <!-- Liste des Alertes -->
+                <div id="alerts-list" class="space-y-4">
+                    <!-- Les alertes seront chargées ici -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Messages d'Urgence -->
+        <div id="emergency-section" class="hidden max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Envoi de Message -->
+                <div class="glass-effect rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Envoyer un Message d'Urgence</h3>
+                    <form onsubmit="sendEmergencyMessage(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Type de Message</label>
+                            <select id="message-type" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500">
+                                <option value="email">Email</option>
+                                <option value="sms">SMS</option>
+                                <option value="radio">Radio</option>
+                                <option value="satellite">Satellite</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Destinataire</label>
+                            <input type="text" id="recipient" required 
+                                   class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500"
+                                   placeholder="email@example.com ou +33123456789">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Sujet (optionnel)</label>
+                            <input type="text" id="message-subject" 
+                                   class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500"
+                                   placeholder="Sujet du message">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                            <textarea id="message-content" required rows="4"
+                                      class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500"
+                                      placeholder="Contenu du message d'urgence..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white font-medium transition-colors">
+                            📡 Envoyer Message d'Urgence
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Historique des Messages -->
+                <div class="glass-effect rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-white">Historique des Messages</h3>
+                        <button onclick="refreshMessages()" class="bg-bunker-600 hover:bg-bunker-700 px-3 py-1 rounded text-sm text-white transition-colors">
+                            🔄 Actualiser
+                        </button>
+                    </div>
+                    <div id="messages-list" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Les messages seront chargés ici -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages de notification -->
+    <div id="notification" class="fixed top-4 right-4 z-50 hidden">
+        <div class="bg-gray-800 border border-gray-600 rounded-lg p-4 shadow-lg max-w-sm">
+            <div id="notification-content" class="text-white"></div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
+
