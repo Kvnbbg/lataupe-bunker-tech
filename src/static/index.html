@@ -1,52 +1,60 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lataupe Bunker Tech - Système de Surveillance</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    
-    <!-- Tailwind CSS -->
+    <title>Lataupe Bunker Tech - Underground Survival System</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js pour les graphiques -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Configuration Tailwind personnalisée -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        bunker: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #0c4a6e 0%, #075985 50%, #0369a1 100%);
+        .slide-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+            transition: opacity 0.5s ease-in-out;
         }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
+        .slide-background iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+        .bunker-ui {
+            background: rgba(26, 26, 26, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
+        .glow {
+            box-shadow: 0 0 20px rgba(58, 134, 255, 0.3);
+        }
+        .story-panel {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .typewriter {
+            border-right: 2px solid #3a86ff;
+            animation: typing 3s steps(40) infinite;
+        }
+        @keyframes typing {
+            from { border-color: #3a86ff; }
+            to { border-color: transparent; }
+        }
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .slide-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
         .status-indicator {
             width: 12px;
             height: 12px;
@@ -54,311 +62,244 @@
             display: inline-block;
             margin-right: 8px;
         }
-        
-        .status-normal { background-color: #10b981; }
+        .status-ok { background-color: #22c55e; }
         .status-warning { background-color: #f59e0b; }
-        .status-critical { background-color: #ef4444; }
-        
-        .pulse-animation {
-            animation: pulse 2s infinite;
+        .status-danger { background-color: #ef4444; }
+        .nav-item {
+            transition: all 0.3s ease;
         }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .nav-item:hover {
+            background-color: rgba(58, 134, 255, 0.2);
+            border-radius: 8px;
         }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-    <!-- Navigation -->
-    <nav class="gradient-bg shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <h1 class="text-xl font-bold text-white">🏠 Lataupe Bunker Tech</h1>
-                    </div>
-                    <div class="hidden md:block ml-10">
-                        <div class="flex items-baseline space-x-4">
-                            <button onclick="showSection('dashboard')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:bg-opacity-20 transition-colors">
-                                📊 Tableau de Bord
-                            </button>
-                            <button onclick="showSection('alerts')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:bg-opacity-20 transition-colors">
-                                🚨 Alertes
-                            </button>
-                            <button onclick="showSection('emergency')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:bg-opacity-20 transition-colors">
-                                📡 Messages d'Urgence
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span id="user-info" class="text-sm text-white opacity-75"></span>
-                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                        Déconnexion
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Background Slide Container -->
+    <div id="slideBackground" class="slide-background">
+        <!-- Slides will be loaded here -->
+    </div>
 
-    <!-- Section de Connexion -->
-    <div id="login-section" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
-            <div class="text-center">
-                <h2 class="mt-6 text-3xl font-extrabold text-white">
-                    Accès au Bunker
-                </h2>
-                <p class="mt-2 text-sm text-gray-300">
-                    Système de surveillance environnementale
-                </p>
-            </div>
-            <form class="mt-8 space-y-6" onsubmit="login(event)">
-                <div class="rounded-md shadow-sm space-y-4">
-                    <div>
-                        <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
-                            Nom d'utilisateur
-                        </label>
-                        <input id="username" name="username" type="text" required 
-                               class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-400 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-bunker-500 focus:border-bunker-500 focus:z-10 sm:text-sm"
-                               placeholder="Entrez votre nom d'utilisateur">
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
-                            Mot de passe
-                        </label>
-                        <input id="password" name="password" type="password" required 
-                               class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-400 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-bunker-500 focus:border-bunker-500 focus:z-10 sm:text-sm"
-                               placeholder="Entrez votre mot de passe">
-                    </div>
-                </div>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <select id="languageSelect" class="bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+        </select>
+    </div>
 
-                <div>
-                    <button type="submit" 
-                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-bunker-600 hover:bg-bunker-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bunker-500 transition-colors">
-                        Se connecter
-                    </button>
-                </div>
-                
-                <div class="text-center text-sm text-gray-400">
-                    <p>Comptes de test :</p>
-                    <p>Admin: admin / admin123</p>
-                    <p>Résident: resident / resident123</p>
-                </div>
-            </form>
+    <!-- Slide Control -->
+    <div class="slide-control">
+        <div class="flex items-center space-x-2 bg-gray-800 p-2 rounded-lg">
+            <button id="prevSlide" class="text-white hover:text-blue-400 transition-colors">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="slideInfo" class="text-sm text-gray-300">Slide 1/5</span>
+            <button id="nextSlide" class="text-white hover:text-blue-400 transition-colors">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button id="toggleSlides" class="text-white hover:text-blue-400 transition-colors ml-2">
+                <i class="fas fa-eye"></i>
+            </button>
         </div>
     </div>
 
-    <!-- Section Principale (cachée par défaut) -->
-    <div id="main-content" class="hidden">
-        <!-- Tableau de Bord -->
-        <div id="dashboard-section" class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <!-- Statut du Système -->
-            <div class="mb-6">
-                <div class="glass-effect rounded-lg p-6">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-2xl font-bold text-white">Statut du Système</h2>
-                        <div id="system-status" class="flex items-center">
-                            <span class="status-indicator status-normal"></span>
-                            <span class="text-green-400 font-medium">Système Opérationnel</span>
-                        </div>
+    <!-- Main Application Container -->
+    <div class="bunker-ui min-h-screen">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="flex items-center justify-center min-h-screen">
+            <div class="max-w-md w-full mx-auto">
+                <div class="bg-gray-800 p-8 rounded-lg shadow-2xl glow">
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-blue-400 mb-2" data-translate="login.title">Bunker Access Control</h1>
+                        <p class="text-gray-300" data-translate="login.welcome">Welcome to Lataupe Bunker Tech</p>
                     </div>
-                    <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                            <div class="text-sm text-gray-400">Dernière Mise à Jour</div>
-                            <div id="last-update" class="text-lg font-semibold text-white">--</div>
-                        </div>
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                            <div class="text-sm text-gray-400">Alertes Actives</div>
-                            <div id="active-alerts-count" class="text-lg font-semibold text-white">0</div>
-                        </div>
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                            <div class="text-sm text-gray-400">Alertes Critiques</div>
-                            <div id="critical-alerts-count" class="text-lg font-semibold text-red-400">0</div>
-                        </div>
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                            <div class="text-sm text-gray-400">Fraîcheur des Données</div>
-                            <div id="data-freshness" class="text-lg font-semibold text-green-400">Récentes</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Données Environnementales -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Température et Humidité -->
-                <div class="glass-effect rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-white mb-4">Température & Humidité</h3>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-blue-400" id="temperature-value">--°C</div>
-                            <div class="text-sm text-gray-400">Température</div>
-                            <div id="temperature-trend" class="text-xs mt-1">--</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-cyan-400" id="humidity-value">--%</div>
-                            <div class="text-sm text-gray-400">Humidité</div>
-                            <div id="humidity-trend" class="text-xs mt-1">--</div>
-                        </div>
-                    </div>
-                    <canvas id="temp-humidity-chart" width="400" height="200"></canvas>
-                </div>
-
-                <!-- Qualité de l'Air -->
-                <div class="glass-effect rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-white mb-4">Qualité de l'Air</h3>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-green-400" id="air-quality-value">--/100</div>
-                            <div class="text-sm text-gray-400">Indice Qualité</div>
-                            <div id="air-quality-trend" class="text-xs mt-1">--</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-purple-400" id="oxygen-value">--%</div>
-                            <div class="text-sm text-gray-400">Oxygène</div>
-                            <div id="oxygen-trend" class="text-xs mt-1">--</div>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-orange-400" id="co2-value">-- PPM</div>
-                            <div class="text-sm text-gray-400">CO2</div>
-                            <div id="co2-trend" class="text-xs mt-1">--</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contrôles -->
-            <div class="glass-effect rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-semibold text-white mb-4">Contrôles du Système</h3>
-                <div class="flex flex-wrap gap-4">
-                    <button onclick="refreshData()" class="bg-bunker-600 hover:bg-bunker-700 px-4 py-2 rounded-lg text-white transition-colors">
-                        🔄 Actualiser les Données
-                    </button>
-                    <button onclick="generateTestData()" class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg text-white transition-colors">
-                        🧪 Générer Données Test
-                    </button>
-                    <button onclick="simulateEmergency('ventilation_failure')" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white transition-colors">
-                        ⚠️ Simuler Panne Ventilation
-                    </button>
-                    <button onclick="simulateEmergency('heating_failure')" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white transition-colors">
-                        🌡️ Simuler Panne Chauffage
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section Alertes -->
-        <div id="alerts-section" class="hidden max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="glass-effect rounded-lg p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-white">Gestion des Alertes</h2>
-                    <button onclick="refreshAlerts()" class="bg-bunker-600 hover:bg-bunker-700 px-4 py-2 rounded-lg text-white transition-colors">
-                        🔄 Actualiser
-                    </button>
-                </div>
-                
-                <!-- Résumé des Alertes -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-red-900 bg-opacity-50 rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-red-400" id="critical-count">0</div>
-                        <div class="text-sm text-gray-300">Critiques</div>
-                    </div>
-                    <div class="bg-orange-900 bg-opacity-50 rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-orange-400" id="high-count">0</div>
-                        <div class="text-sm text-gray-300">Élevées</div>
-                    </div>
-                    <div class="bg-yellow-900 bg-opacity-50 rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-yellow-400" id="medium-count">0</div>
-                        <div class="text-sm text-gray-300">Moyennes</div>
-                    </div>
-                    <div class="bg-blue-900 bg-opacity-50 rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-blue-400" id="low-count">0</div>
-                        <div class="text-sm text-gray-300">Faibles</div>
-                    </div>
-                </div>
-
-                <!-- Liste des Alertes -->
-                <div id="alerts-list" class="space-y-4">
-                    <!-- Les alertes seront chargées ici -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Section Messages d'Urgence -->
-        <div id="emergency-section" class="hidden max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Envoi de Message -->
-                <div class="glass-effect rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-white mb-4">Envoyer un Message d'Urgence</h3>
-                    <form onsubmit="sendEmergencyMessage(event)" class="space-y-4">
+                    <form id="loginForm" class="space-y-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Type de Message</label>
-                            <select id="message-type" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500">
-                                <option value="email">Email</option>
-                                <option value="sms">SMS</option>
-                                <option value="radio">Radio</option>
-                                <option value="satellite">Satellite</option>
-                            </select>
+                            <label class="block text-sm font-medium text-gray-300 mb-2" data-translate="login.username">Username</label>
+                            <input type="text" id="username" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Destinataire</label>
-                            <input type="text" id="recipient" required 
-                                   class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500"
-                                   placeholder="email@example.com ou +33123456789">
+                            <label class="block text-sm font-medium text-gray-300 mb-2" data-translate="login.password">Password</label>
+                            <input type="password" id="password" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Sujet (optionnel)</label>
-                            <input type="text" id="message-subject" 
-                                   class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500"
-                                   placeholder="Sujet du message">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Message</label>
-                            <textarea id="message-content" required rows="4"
-                                      class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-bunker-500"
-                                      placeholder="Contenu du message d'urgence..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white font-medium transition-colors">
-                            📡 Envoyer Message d'Urgence
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors glow" data-translate="login.login">
+                            Access Bunker
                         </button>
                     </form>
+                    <div class="mt-4 text-center text-sm text-gray-400">
+                        <p>Default users: admin/admin123, resident/resident123</p>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Historique des Messages -->
-                <div class="glass-effect rounded-lg p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-white">Historique des Messages</h3>
-                        <button onclick="refreshMessages()" class="bg-bunker-600 hover:bg-bunker-700 px-3 py-1 rounded text-sm text-white transition-colors">
-                            🔄 Actualiser
-                        </button>
+        <!-- Main Dashboard -->
+        <div id="mainApp" class="hidden">
+            <!-- Navigation -->
+            <nav class="bg-gray-800 p-4 border-b border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-xl font-bold text-blue-400">Lataupe Bunker Tech</h1>
+                        <div class="flex space-x-4">
+                            <button class="nav-item px-3 py-2 text-gray-300 hover:text-white" data-page="dashboard" data-translate="nav.dashboard">Dashboard</button>
+                            <button class="nav-item px-3 py-2 text-gray-300 hover:text-white" data-page="alerts" data-translate="nav.alerts">Alerts</button>
+                            <button class="nav-item px-3 py-2 text-gray-300 hover:text-white" data-page="emergency" data-translate="nav.emergency">Emergency</button>
+                            <button class="nav-item px-3 py-2 text-gray-300 hover:text-white" data-page="story" data-translate="nav.story">Story</button>
+                            <button class="nav-item px-3 py-2 text-gray-300 hover:text-white" data-page="slides" data-translate="nav.slides">Slides</button>
+                        </div>
                     </div>
-                    <div id="messages-list" class="space-y-3 max-h-96 overflow-y-auto">
-                        <!-- Les messages seront chargés ici -->
+                    <div class="flex items-center space-x-4">
+                        <span id="userInfo" class="text-gray-300"></span>
+                        <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors" data-translate="nav.logout">Logout</button>
                     </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page-content p-6">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-blue-400 mb-4" data-translate="dashboard.title">Environmental Monitoring Dashboard</h2>
+                    
+                    <!-- System Status Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400" data-translate="dashboard.health_score">Health Score</p>
+                                    <p id="healthScore" class="text-2xl font-bold text-green-400">--</p>
+                                </div>
+                                <div class="text-green-400 text-3xl">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400" data-translate="dashboard.temperature">Temperature</p>
+                                    <p id="temperature" class="text-2xl font-bold text-blue-400">--°C</p>
+                                </div>
+                                <div class="text-blue-400 text-3xl">
+                                    <i class="fas fa-thermometer-half"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400" data-translate="dashboard.oxygen">Oxygen Level</p>
+                                    <p id="oxygenLevel" class="text-2xl font-bold text-green-400">--%</p>
+                                </div>
+                                <div class="text-green-400 text-3xl">
+                                    <i class="fas fa-lungs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400" data-translate="dashboard.radiation">Radiation</p>
+                                    <p id="radiationLevel" class="text-2xl font-bold text-yellow-400">-- µSv/h</p>
+                                </div>
+                                <div class="text-yellow-400 text-3xl">
+                                    <i class="fas fa-radiation"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4">Environmental Trends</h3>
+                            <div class="chart-container">
+                                <canvas id="environmentalChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4" data-translate="dashboard.active_alerts">Active Alerts</h3>
+                            <div id="alertsList" class="space-y-2">
+                                <!-- Alerts will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story Page -->
+            <div id="storyPage" class="page-content p-6 hidden">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-2xl font-bold text-blue-400 mb-6" data-translate="story.title">The Chronicles</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Chapter Navigation -->
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4" data-translate="story.chapters">Chapters</h3>
+                            <div id="chapterList" class="space-y-2">
+                                <!-- Chapters will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Story Content -->
+                        <div class="lg:col-span-2">
+                            <div class="bg-gray-800 p-6 rounded-lg shadow-lg story-panel">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 id="currentChapterTitle" class="text-lg font-semibold text-blue-400">Select a Chapter</h3>
+                                    <div class="flex space-x-2">
+                                        <button id="prevChapter" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors" data-translate="story.previous">Previous</button>
+                                        <button id="nextChapter" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors" data-translate="story.next">Next</button>
+                                    </div>
+                                </div>
+                                <div id="storyContent" class="text-gray-300 leading-relaxed">
+                                    <p class="text-center text-gray-500">Select a chapter to begin reading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slides Page -->
+            <div id="slidesPage" class="page-content p-6 hidden">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-2xl font-bold text-blue-400 mb-6" data-translate="story.background_slides">Background Slides</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div id="slidesList">
+                            <!-- Slides will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Page -->
+            <div id="alertsPage" class="page-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-blue-400 mb-6" data-translate="alerts.title">Security Alerts</h2>
+                <div id="alertsContent" class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <!-- Alerts content will be populated here -->
+                </div>
+            </div>
+
+            <!-- Emergency Page -->
+            <div id="emergencyPage" class="page-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-blue-400 mb-6" data-translate="emergency.title">Emergency Communications</h2>
+                <div id="emergencyContent" class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <!-- Emergency content will be populated here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Messages de notification -->
-    <div id="notification" class="fixed top-4 right-4 z-50 hidden">
-        <div class="bg-gray-800 border border-gray-600 rounded-lg p-4 shadow-lg max-w-sm">
-            <div id="notification-content" class="text-white"></div>
-        </div>
-    </div>
-
-    <script src="/static/app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
-
