@@ -244,6 +244,22 @@ L'application est compatible avec :
 
 - **Azure** : App Service ou Container Instances
 
+## 🚀 Railway Deployment
+
+You can deploy this app to Railway with one click:
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/lzsD1L?referralCode=74Ni9C)
+
+### Manual Steps
+1. Push this repo to your own GitHub.
+2. Go to [Railway](https://railway.app/) and create a new project from your repo.
+3. Set environment variables (SECRET_KEY, JWT_SECRET_KEY, etc) in Railway dashboard.
+4. Deploy! The app will be available at your Railway URL.
+
+- The app listens on `$PORT` (default 8080 for Railway).
+- All secrets/config are read from environment variables.
+- Dockerfile and Procfile are provided for compatibility.
+
 ## 🛠️ Extensibilité
 
 ### Intégration d'API

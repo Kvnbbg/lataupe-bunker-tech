@@ -1,19 +1,23 @@
-FROM python:3.11-slim AS builder
-WORKDIR /app
-RUN python -m venv venv
-ENV VIRTUAL_ENV=/app/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+FROM python:3.11-slim
 
-FROM python:3.11-slim AS runner
 WORKDIR /app
-COPY --from=builder /app/venv venv
-COPY app.py .
-COPY templates/ templates/
-ENV VIRTUAL_ENV=/app/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-ENV FLASK_ENV=production
-ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Copy app code
+COPY . .
+
+# Expose port (Railway uses $PORT)
 EXPOSE 8080
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "app:app"]
+
+# Set environment variable for Flask
+ENV FLASK_ENV=production
+ENV PORT=8080
+
+# Start the app
+CMD ["python", "lataupe_integrated_app.py"]
