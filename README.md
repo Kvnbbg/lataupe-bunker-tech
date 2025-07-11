@@ -5,6 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-2.3+-green.svg)](https://flask.palletsprojects.com)
 [![License](https://img.shields.io/badge/License-MPL_2.0-red.svg)](LICENSE)
+
 ## 🌟 Vue d'Ensemble
 
 Lataupe Bunker Tech est une application web moderne conçue pour la surveillance et la gestion d'environnements de bunkers souterrains. Dans un scénario post-apocalyptique où la couche d'ozone a disparu, cette application permet aux habitants de bunkers de surveiller les conditions environnementales critiques et de gérer les communications d'urgence.
@@ -12,24 +13,28 @@ Lataupe Bunker Tech est une application web moderne conçue pour la surveillance
 ### ✨ Fonctionnalités Principales
 
 - 📊 **Surveillance Environnementale en Temps Réel**
+
   - Température, humidité, qualité de l'air
   - Niveaux d'oxygène et de CO2
   - Détection de radiations UV
   - Graphiques interactifs avec Chart.js
 
 - 🚨 **Système d'Alertes Intelligent**
+
   - Détection automatique des seuils critiques
   - Classification par niveaux de sévérité
   - Historique complet des incidents
   - Interface de résolution des alertes
 
 - 📱 **Communication d'Urgence**
+
   - Messages SMS, email, radio, satellite
   - Templates prédéfinis pour situations d'urgence
   - Suivi du statut de livraison
   - Historique des communications
 
 - 🔐 **Sécurité Avancée**
+
   - Authentification multi-rôles (Résident, Sécurité, Admin)
   - Protection CSRF et XSS
   - Sessions sécurisées
@@ -251,6 +256,7 @@ You can deploy this app to Railway with one click:
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/lzsD1L?referralCode=74Ni9C)
 
 ### Manual Steps
+
 1. Push this repo to your own GitHub.
 2. Go to [Railway](https://railway.app/) and create a new project from your repo.
 3. Set environment variables (SECRET_KEY, JWT_SECRET_KEY, etc) in Railway dashboard.
@@ -337,4 +343,3 @@ Pour obtenir de l'aide :
 **Développé avec ❤️ pour la survie post-apocalyptique** 🌍💥🏠
 
 Rédigée par Manus IA & Kvnbbg
-

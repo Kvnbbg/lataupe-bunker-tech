@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lataupe Bunker Tech - Underground Survival System</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" href="/static/images/logo.jpeg" type="image/jpeg">
-    
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <!-- Chart.js for environmental data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Stripe SDK -->
     <script src="https://js.stripe.com/v3/"></script>
-    
+
     <style>
         /* CSS Variables for Theme Management */
         :root {
@@ -153,7 +156,8 @@
             gap: 1rem;
         }
 
-        .theme-selector, .language-selector {
+        .theme-selector,
+        .language-selector {
             background: var(--accent-bg);
             border: 1px solid var(--border-color);
             color: var(--primary-text);
@@ -163,7 +167,8 @@
             transition: all 0.3s ease;
         }
 
-        .theme-selector:hover, .language-selector:hover {
+        .theme-selector:hover,
+        .language-selector:hover {
             border-color: var(--accent-text);
             box-shadow: 0 0 10px var(--glow-color);
         }
@@ -187,8 +192,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Login/Register Screen */
@@ -529,8 +541,13 @@
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .modal-content {
@@ -546,8 +563,15 @@
         }
 
         @keyframes modalSlideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         /* Responsive Design */
@@ -589,7 +613,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Success/Error Animations */
@@ -602,15 +628,33 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
 
         /* Slide/Story Mode */
@@ -663,6 +707,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container" id="app">
         <!-- Header -->
@@ -696,7 +741,8 @@
                     <div class="auth-card" data-aos="fade-up">
                         <div class="auth-tabs">
                             <button class="auth-tab active" data-tab="login" data-translate="auth.login">Login</button>
-                            <button class="auth-tab" data-tab="register" data-translate="auth.register">Register</button>
+                            <button class="auth-tab" data-tab="register"
+                                data-translate="auth.register">Register</button>
                         </div>
 
                         <!-- Login Form -->
@@ -730,7 +776,8 @@
                                 <input type="password" class="form-input" id="registerPassword" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-translate="auth.confirm_password">Confirm Password</label>
+                                <label class="form-label" data-translate="auth.confirm_password">Confirm
+                                    Password</label>
                                 <input type="password" class="form-input" id="registerConfirmPassword" required>
                             </div>
                             <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -747,7 +794,8 @@
                 <!-- Navigation Tabs -->
                 <div class="nav-tabs">
                     <div class="nav-tab active" data-screen="dashboard" data-translate="nav.dashboard">Dashboard</div>
-                    <div class="nav-tab" data-screen="environmental" data-translate="nav.environmental">Environmental</div>
+                    <div class="nav-tab" data-screen="environmental" data-translate="nav.environmental">Environmental
+                    </div>
                     <div class="nav-tab" data-screen="alerts" data-translate="nav.alerts">Alerts</div>
                     <div class="nav-tab" data-screen="premium" data-translate="nav.premium">Premium</div>
                     <div class="nav-tab" data-screen="story" data-translate="nav.story">Story Mode</div>
@@ -769,10 +817,11 @@
                             <div class="xp-fill" id="xpBar" style="width: 25%;"></div>
                         </div>
                         <p><span id="currentXP">250</span> / <span id="nextLevelXP">1000</span> XP</p>
-                        
+
                         <div class="badges-container">
                             <div class="badge earned" data-translate="badges.first_login">First Login</div>
-                            <div class="badge earned" data-translate="badges.environmental_monitor">Environmental Monitor</div>
+                            <div class="badge earned" data-translate="badges.environmental_monitor">Environmental
+                                Monitor</div>
                             <div class="badge" data-translate="badges.alert_responder">Alert Responder</div>
                             <div class="badge" data-translate="badges.premium_member">Premium Member</div>
                         </div>
@@ -860,15 +909,18 @@
                 <div id="premiumContent" class="dashboard-content" style="display: none;">
                     <div class="premium-banner" data-aos="fade-up">
                         <h2 data-translate="premium.title">Upgrade to Premium</h2>
-                        <p data-translate="premium.description">Unlock advanced features and enhanced monitoring capabilities</p>
-                        <button class="btn btn-primary" id="upgradeBtn" data-translate="premium.upgrade">Upgrade Now</button>
+                        <p data-translate="premium.description">Unlock advanced features and enhanced monitoring
+                            capabilities</p>
+                        <button class="btn btn-primary" id="upgradeBtn" data-translate="premium.upgrade">Upgrade
+                            Now</button>
                     </div>
 
                     <div class="premium-features">
                         <div class="premium-feature" data-aos="fade-up" data-aos-delay="100">
                             <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--accent-text);"></i>
                             <h4 data-translate="premium.advanced_analytics">Advanced Analytics</h4>
-                            <p data-translate="premium.analytics_desc">Detailed historical data and predictive analysis</p>
+                            <p data-translate="premium.analytics_desc">Detailed historical data and predictive analysis
+                            </p>
                         </div>
                         <div class="premium-feature" data-aos="fade-up" data-aos-delay="200">
                             <i class="fas fa-bell" style="font-size: 2rem; color: var(--accent-text);"></i>
@@ -888,12 +940,16 @@
                     <div class="slide-container" id="slideContainer">
                         <div class="slide-content">
                             <h2 id="slideTitle">Welcome to the Underground</h2>
-                            <p id="slideText">The year is 2045. The surface world has become uninhabitable due to environmental collapse. Humanity has retreated underground, and you are the guardian of this bunker...</p>
+                            <p id="slideText">The year is 2045. The surface world has become uninhabitable due to
+                                environmental collapse. Humanity has retreated underground, and you are the guardian of
+                                this bunker...</p>
                         </div>
                         <div class="slide-navigation">
-                            <button class="btn btn-secondary" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-secondary" id="prevSlide"><i
+                                    class="fas fa-chevron-left"></i></button>
                             <span id="slideIndicator">1 / 5</span>
-                            <button class="btn btn-secondary" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+                            <button class="btn btn-secondary" id="nextSlide"><i
+                                    class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
@@ -904,10 +960,14 @@
         <footer class="footer">
             <p>&copy; 2025 Lataupe Bunker Tech. All rights reserved.</p>
             <div class="social-links">
-                <a href="https://github.com/Kvnbbg/" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://t.me/kevinmarville" class="social-link" target="_blank"><i class="fab fa-telegram"></i></a>
-                <a href="https://matrix.to/#/@kvnbbg:matrix.org" class="social-link" target="_blank"><i class="fas fa-comments"></i></a>
-                <a href="https://patreon.com/kvnbbg" class="social-link" target="_blank"><i class="fab fa-patreon"></i></a>
+                <a href="https://github.com/Kvnbbg/" class="social-link" target="_blank"><i
+                        class="fab fa-github"></i></a>
+                <a href="https://t.me/kevinmarville" class="social-link" target="_blank"><i
+                        class="fab fa-telegram"></i></a>
+                <a href="https://matrix.to/#/@kvnbbg:matrix.org" class="social-link" target="_blank"><i
+                        class="fas fa-comments"></i></a>
+                <a href="https://patreon.com/kvnbbg" class="social-link" target="_blank"><i
+                        class="fab fa-patreon"></i></a>
             </div>
         </footer>
     </div>
@@ -947,9 +1007,9 @@
 
     <!-- AOS Animation Library -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
+
     <!-- Main Application Script -->
     <script src="/static/app.js"></script>
 </body>
-</html>
 
+</html>

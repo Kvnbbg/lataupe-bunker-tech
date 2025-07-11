@@ -3,23 +3,22 @@
 Lataupe Bunker Tech - Entry Point
 
 This file serves as the main entry point for the application.
-The actual Flask application is located in src/main.py
+The actual Flask application is in lataupe_integrated_app.py
 """
 
 import os
 import sys
-import subprocess
 
 def main():
-    """Run the main application from the src directory."""
+    """Run the main integrated application."""
     # Get the directory of this script
     script_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # Path to the actual main.py in src directory
-    src_main = os.path.join(script_dir, 'src', 'main.py')
+    # Path to the integrated app
+    integrated_app = os.path.join(script_dir, 'lataupe_integrated_app.py')
     
-    if not os.path.exists(src_main):
-        print("Error: src/main.py not found!")
+    if not os.path.exists(integrated_app):
+        print("Error: lataupe_integrated_app.py not found!")
         print("Please ensure the project structure is set up correctly.")
         sys.exit(1)
     
@@ -30,8 +29,12 @@ def main():
     os.chdir(script_dir)
     
     try:
-        # Import and run the Flask app
-        from src.main import app
+        # Import and run the integrated Flask app
+        from lataupe_integrated_app import app, create_tables
+        
+        # Initialize database tables
+        with app.app_context():
+            create_tables()
         
         # Run the application
         port = int(os.environ.get('PORT', 5001))
