@@ -341,5 +341,3 @@ Pour obtenir de l'aide :
 ---
 
 **Développé avec ❤️ pour la survie post-apocalyptique** 🌍💥🏠
-
-Rédigée par Manus IA & Kvnbbg
