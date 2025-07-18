@@ -18,6 +18,8 @@ import logging
 import hashlib
 import secrets
 import unittest
+import asyncio
+import re
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
 from functools import wraps
@@ -28,16 +30,130 @@ from flask import Flask, request, jsonify, session, send_from_directory, g, rend
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 # JWT and encryption
 try:
     import jwt
     import bcrypt
+    from marshmallow import Schema, fields, ValidationError
+    from bleach import clean
 except ImportError:
     print("Installing required packages...")
-    os.system("pip install PyJWT bcrypt")
+    os.system("pip install PyJWT bcrypt marshmallow bleach")
     import jwt
     import bcrypt
+    from marshmallow import Schema, fields, ValidationError
+    from bleach import clean
+
+# ============================================================================
+# SECURITY AND VALIDATION LAYER
+# ============================================================================
+
+class SecurityManager:
+    """Comprehensive security management"""
+    
+    ALLOWED_HTML_TAGS = ['b', 'i', 'u', 'em', 'strong', 'p', 'br']
+    ALLOWED_ATTRIBUTES = {}
+    
+    @staticmethod
+    def sanitize_input(data: str) -> str:
+        """Sanitize user input to prevent XSS"""
+        if not isinstance(data, str):
+            return str(data)
+        
+        # Remove HTML tags and malicious content
+        cleaned = clean(data, tags=SecurityManager.ALLOWED_HTML_TAGS, 
+                       attributes=SecurityManager.ALLOWED_ATTRIBUTES, strip=True)
+        
+        # Remove SQL injection patterns
+        sql_patterns = [
+            r'(union|select|insert|update|delete|drop|create|alter|exec|execute)',
+            r'(\-\-|\/\*|\*\/)',
+            r'(script|javascript|vbscript|onload|onerror|onclick)'
+        ]
+        
+        for pattern in sql_patterns:
+            cleaned = re.sub(pattern, '', cleaned, flags=re.IGNORECASE)
+        
+        return cleaned.strip()
+    
+    @staticmethod
+    def validate_email(email: str) -> bool:
+        """Validate email format"""
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        return re.match(pattern, email) is not None
+    
+    @staticmethod
+    def validate_password(password: str) -> Dict[str, Any]:
+        """Validate password strength"""
+        errors = []
+        
+        if len(password) < 8:
+            errors.append("Password must be at least 8 characters long")
+        
+        if not re.search(r'[A-Z]', password):
+            errors.append("Password must contain at least one uppercase letter")
+        
+        if not re.search(r'[a-z]', password):
+            errors.append("Password must contain at least one lowercase letter")
+        
+        if not re.search(r'\d', password):
+            errors.append("Password must contain at least one number")
+        
+        return {
+            'valid': len(errors) == 0,
+            'errors': errors,
+            'strength': 'strong' if len(errors) == 0 else 'weak'
+        }
+    
+    @staticmethod
+    def generate_secure_token() -> str:
+        """Generate cryptographically secure token"""
+        return secrets.token_urlsafe(32)
+    
+    @staticmethod
+    def rate_limit_check(identifier: str, max_requests: int = 10, window: int = 60) -> bool:
+        """Simple rate limiting check"""
+        # Implementation would use Redis or similar in production
+        # For now, we'll use a simple in-memory store
+        if not hasattr(SecurityManager, '_rate_limit_store'):
+            SecurityManager._rate_limit_store = {}
+        
+        now = time.time()
+        key = f"{identifier}:{int(now // window)}"
+        
+        current_count = SecurityManager._rate_limit_store.get(key, 0)
+        if current_count >= max_requests:
+            return False
+        
+        SecurityManager._rate_limit_store[key] = current_count + 1
+        return True
+
+# ============================================================================
+# VALIDATION SCHEMAS
+# ============================================================================
+
+class LoginSchema(Schema):
+    """Login validation schema"""
+    username = fields.Str(required=True, validate=lambda x: len(x) >= 3)
+    password = fields.Str(required=True, validate=lambda x: len(x) >= 8)
+
+class RegisterSchema(Schema):
+    """Registration validation schema"""
+    username = fields.Str(required=True, validate=lambda x: len(x) >= 3)
+    email = fields.Email(required=True)
+    password = fields.Str(required=True, validate=lambda x: len(x) >= 8)
+    confirm_password = fields.Str(required=True)
+
+class EnvironmentalDataSchema(Schema):
+    """Environmental data validation schema"""
+    bunker_id = fields.Str(required=True, validate=lambda x: len(x) >= 3)
+    temperature = fields.Float(validate=lambda x: -50 <= x <= 50)
+    humidity = fields.Float(validate=lambda x: 0 <= x <= 100)
+    oxygen_level = fields.Float(validate=lambda x: 0 <= x <= 25)
+    co2_level = fields.Float(validate=lambda x: 0 <= x <= 10000)
+    radiation_level = fields.Float(validate=lambda x: 0 <= x <= 100)
 
 # ============================================================================
 # CONFIGURATION AND CONSTANTS
@@ -1066,7 +1182,7 @@ MAIN_TEMPLATE = """
 def index():
     """Serve the main application"""
     bunker_logger.info("Serving main application")
-    return render_template_string(MAIN_TEMPLATE)
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/health')
 def health_check():
