@@ -340,4 +340,4 @@ Pour obtenir de l'aide :
 
 ---
 
-**Développé avec ❤️ pour la survie post-apocalyptique** 🌍💥🏠
+**Développé avec ❤️**
