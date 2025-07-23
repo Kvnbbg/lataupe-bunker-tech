@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Système de gestion de bunker de survie intelligent">
+    <meta name="keywords" content="bunker, survie, sécurité, monitoring, quiz">
+    <meta name="author" content="Lataupe Bunker Tech">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Bunker Tech">
+    <meta name="msapplication-TileColor" content="#2c3e50">
+    <meta name="msapplication-TileImage" content="/static/icons/icon-144x144.png">
+    
+    <!-- Preconnect pour optimiser les performances -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Favicon et icônes -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+    <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#2c3e50">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/responsive.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>{% block title %}Lataupe Bunker Tech{% endblock %}</title>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation mobile -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <a href="/" class="navbar-brand">
+                    <img src="/static/icons/icon-32x32.png" alt="Logo" width="32" height="32">
+                    Bunker Tech
+                </a>
+                
+                <button class="navbar-toggler d-lg-none" type="button" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">☰</span>
+                </button>
+                
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/quiz">Quiz</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/monitoring">Monitoring</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/settings">Paramètres</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile">Profil</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Contenu principal -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer mobile -->
+    <footer class="footer d-lg-none">
+        <div class="container">
+            <div class="row">
+                <div class="col-3 text-center">
+                    <a href="/dashboard" class="footer-link">
+                        <div class="footer-icon">📊</div>
+                        <div class="footer-text">Dashboard</div>
+                    </a>
+                </div>
+                <div class="col-3 text-center">
+                    <a href="/quiz" class="footer-link">
+                        <div class="footer-icon">🧠</div>
+                        <div class="footer-text">Quiz</div>
+                    </a>
+                </div>
+                <div class="col-3 text-center">
+                    <a href="/monitoring" class="footer-link">
+                        <div class="footer-icon">📡</div>
+                        <div class="footer-text">Monitoring</div>
+                    </a>
+                </div>
+                <div class="col-3 text-center">
+                    <a href="/profile" class="footer-link">
+                        <div class="footer-icon">👤</div>
+                        <div class="footer-text">Profil</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="/static/js/mobile.js"></script>
+    {% block extra_scripts %}{% endblock %}
+    
+    <!-- PWA Installation prompt -->
+    <div id="pwa-install-prompt" class="pwa-prompt d-none">
+        <div class="pwa-prompt-content">
+            <h3>Installer l'application</h3>
+            <p>Installez Bunker Tech sur votre appareil pour une meilleure expérience.</p>
+            <div class="pwa-prompt-actions">
+                <button id="pwa-install-btn" class="btn btn-primary">Installer</button>
+                <button id="pwa-dismiss-btn" class="btn btn-secondary">Plus tard</button>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        /* Styles pour le footer mobile */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--spacing-sm) 0;
+            z-index: var(--z-sticky);
+        }
+        
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            padding: var(--spacing-xs);
+            border-radius: var(--border-radius-sm);
+            transition: all var(--transition-fast);
+        }
+        
+        .footer-link:hover,
+        .footer-link.active {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-icon {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .footer-text {
+            font-size: var(--font-size-xs);
+        }
+        
+        /* Ajuster le contenu principal pour le footer mobile */
+        @media (max-width: 991px) {
+            .main-content {
+                padding-bottom: 80px;
+            }
+        }
+        
+        /* PWA Install Prompt */
+        .pwa-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background-color: var(--medium-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            z-index: var(--z-modal);
+            padding: var(--spacing-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pwa-prompt h3 {
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+        
+        .pwa-prompt p {
+            margin-bottom: var(--spacing-md);
+            color: var(--text-secondary);
+        }
+        
+        .pwa-prompt-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .pwa-prompt-actions .btn {
+            flex: 1;
+        }
+    </style>
+    
+    <script>
+        // PWA Installation
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Afficher le prompt personnalisé
+            const prompt = document.getElementById('pwa-install-prompt');
+            prompt.classList.remove('d-none');
+        });
+        
+        document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    console.log('PWA installée');
+                }
+                
+                deferredPrompt = null;
+                document.getElementById('pwa-install-prompt').classList.add('d-none');
+            }
+        });
+        
+        document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+            document.getElementById('pwa-install-prompt').classList.add('d-none');
+        });
+        
+        // Marquer le lien actif dans le footer
+        const currentPath = window.location.pathname;
+        const footerLinks = document.querySelectorAll('.footer-link');
+        
+        footerLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

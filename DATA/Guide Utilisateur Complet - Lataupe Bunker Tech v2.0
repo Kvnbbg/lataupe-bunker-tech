@@ -1,0 +1,348 @@
+# Guide Utilisateur Complet - Lataupe Bunker Tech v2.0
+
+**Version**: 2.0.0**Date**: Janvier 2024**Auteur**: kvnbbg
+
+## Table des Matières
+
+1. [Introduction et Bienvenue](#introduction-et-bienvenue)
+
+1. [Premiers Pas](#premiers-pas)
+
+1. [Interface et Navigation](#interface-et-navigation)
+
+1. [Dashboard Principal](#dashboard-principal)
+
+1. [Système de Quiz](#système-de-quiz)
+
+1. [Gestion des Alertes](#gestion-des-alertes)
+
+1. [Fonctionnalités Mobiles](#fonctionnalités-mobiles)
+
+1. [Paramètres et Personnalisation](#paramètres-et-personnalisation)
+
+1. [Dépannage et Support](#dépannage-et-support)
+
+1. [FAQ](#faq)
+
+---
+
+## Introduction et Bienvenue
+
+Bienvenue dans Lataupe Bunker Tech, votre solution complète de gestion de bunker de survie. Cette application révolutionnaire combine des technologies de pointe avec une interface intuitive pour vous offrir un contrôle total sur votre environnement de survie.
+
+### Qu'est-ce que Lataupe Bunker Tech ?
+
+Lataupe Bunker Tech est une application web progressive (PWA) conçue spécifiquement pour la gestion et la surveillance de bunkers de survie. L'application vous permet de monitorer en temps réel les conditions environnementales de votre bunker, de recevoir des alertes critiques, et de maintenir vos compétences de survie à jour grâce à un système de quiz interactifs.
+
+L'application fonctionne sur tous vos appareils - ordinateurs, tablettes et smartphones - avec une synchronisation automatique de vos données. Même sans connexion internet, la plupart des fonctionnalités restent disponibles grâce à la technologie PWA avancée.
+
+### Fonctionnalités Principales
+
+**Monitoring Temps Réel** : Surveillez continuellement les niveaux d'oxygène, la température, l'humidité, et les réserves énergétiques de votre bunker avec des graphiques interactifs et des alertes automatiques.
+
+**Système de Quiz Adaptatif** : Maintenez et développez vos compétences de survie avec des quiz personnalisés qui s'adaptent à votre niveau et identifient vos domaines d'amélioration.
+
+**Alertes Intelligentes** : Recevez des notifications instantanées sur votre smartphone, tablette ou ordinateur lorsque des conditions critiques sont détectées dans votre bunker.
+
+**Interface Mobile Optimisée** : Accédez à toutes les fonctionnalités depuis votre smartphone avec une interface tactile optimisée et la possibilité de fonctionner hors ligne.
+
+**Sécurité Avancée** : Vos données sont protégées par un chiffrement de niveau militaire et une authentification multi-facteurs pour garantir la confidentialité de vos informations sensibles.
+
+## Premiers Pas
+
+### Création de Votre Compte
+
+La création de votre compte Lataupe Bunker Tech est simple et sécurisée. Rendez-vous sur la page d'accueil et cliquez sur "Créer un compte". Vous devrez fournir une adresse email valide, choisir un nom d'utilisateur unique, et créer un mot de passe sécurisé.
+
+Le mot de passe doit contenir au minimum 8 caractères avec une combinaison de lettres majuscules et minuscules, de chiffres, et de caractères spéciaux. Cette exigence garantit la sécurité de votre compte face aux tentatives de piratage.
+
+Après avoir soumis le formulaire, vous recevrez un email de vérification à l'adresse fournie. Cliquez sur le lien de vérification pour activer votre compte. Cette étape est obligatoire pour accéder aux fonctionnalités de l'application.
+
+### Configuration Initiale
+
+Lors de votre première connexion, l'assistant de configuration vous guidera à travers les étapes essentielles pour personnaliser votre expérience. Vous pourrez configurer les informations de votre bunker : localisation, capacité, équipements installés, et seuils d'alerte personnalisés.
+
+La configuration des notifications vous permet de choisir comment et quand recevoir les alertes. Vous pouvez activer les notifications push sur vos appareils mobiles, configurer les alertes email, et définir des horaires de silence pour éviter les interruptions pendant vos périodes de repos.
+
+L'assistant vous proposera également de télécharger l'application mobile et de l'installer sur votre écran d'accueil pour un accès rapide. Cette installation transforme votre navigateur web en une véritable application native avec toutes les fonctionnalités avancées.
+
+### Première Visite du Dashboard
+
+Votre premier accès au dashboard vous présente une vue d'ensemble de votre bunker avec des données de démonstration pour vous familiariser avec l'interface. Les métriques principales sont affichées sous forme de cartes colorées qui changent de couleur selon l'état des systèmes.
+
+Le graphique principal montre l'évolution des métriques dans le temps avec des courbes interactives que vous pouvez explorer en détail. Survolez les points de données pour voir les valeurs exactes et utilisez les contrôles de zoom pour analyser des périodes spécifiques.
+
+Les alertes récentes apparaissent dans le panneau latéral avec des codes couleur qui indiquent leur niveau de criticité. Les alertes vertes sont informatives, les jaunes nécessitent une attention, les oranges requièrent une action, et les rouges indiquent des urgences.
+
+## Interface et Navigation
+
+### Structure Générale
+
+L'interface de Lataupe Bunker Tech suit une structure logique qui facilite la navigation et l'accès rapide aux fonctionnalités importantes. La barre de navigation principale reste toujours visible en haut de l'écran et contient les liens vers les sections principales : Dashboard, Quiz, Alertes, et Paramètres.
+
+Le menu utilisateur, accessible en cliquant sur votre avatar en haut à droite, donne accès aux paramètres de compte, aux préférences de notification, et à l'option de déconnexion. Ce menu inclut également des liens vers l'aide et le support technique.
+
+Sur les écrans mobiles, la navigation s'adapte automatiquement avec un menu hamburger qui révèle toutes les options de navigation. Le footer mobile fixe fournit un accès rapide aux fonctions les plus utilisées avec des icônes tactiles optimisées.
+
+### Navigation Tactile
+
+L'interface mobile supporte des gestes intuitifs qui accélèrent la navigation. Glissez vers la droite depuis le bord gauche de l'écran pour ouvrir le menu principal. Glissez vers la gauche pour fermer les panneaux ouverts. Tirez vers le bas sur n'importe quelle page pour actualiser les données.
+
+Les graphiques supportent les gestes de pincement pour zoomer et de glissement pour naviguer dans le temps. Ces interactions tactiles rendent l'exploration des données aussi naturelle que sur une application native.
+
+Les listes d'alertes et de quiz supportent le glissement horizontal sur chaque élément pour révéler des actions rapides comme marquer comme lu, supprimer, ou partager.
+
+### Raccourcis Clavier
+
+Pour les utilisateurs d'ordinateur, de nombreux raccourcis clavier accélèrent la navigation. Appuyez sur 'D' pour accéder rapidement au Dashboard, 'Q' pour les Quiz, 'A' pour les Alertes, et 'P' pour les Paramètres.
+
+La touche '/' active la recherche globale qui vous permet de trouver rapidement n'importe quelle information dans l'application. La touche 'Échap' ferme les modales et panneaux ouverts.
+
+Les flèches directionnelles permettent de naviguer dans les listes et les graphiques, tandis que 'Entrée' active l'élément sélectionné. Ces raccourcis sont particulièrement utiles pour les utilisateurs qui préfèrent le clavier à la souris.
+
+## Dashboard Principal
+
+### Vue d'Ensemble des Métriques
+
+Le dashboard principal constitue le cœur de votre expérience Lataupe Bunker Tech. Il présente en un coup d'œil l'état complet de votre bunker avec des visualisations claires et des informations actionables. Les quatre métriques principales - oxygène, température, humidité, et énergie - sont affichées dans des cartes colorées qui changent d'apparence selon l'état des systèmes.
+
+Chaque carte métrique affiche la valeur actuelle en grand format, accompagnée d'un indicateur de tendance qui montre si la valeur augmente, diminue, ou reste stable. Un petit graphique sparkline montre l'évolution des dernières heures pour vous donner un contexte immédiat.
+
+Les seuils d'alerte sont visualisés par des zones colorées sur les cartes. La zone verte indique des valeurs normales, la zone jaune signale une attention nécessaire, et la zone rouge indique des conditions critiques nécessitant une action immédiate.
+
+### Graphiques Interactifs
+
+Le graphique principal du dashboard offre une vue détaillée de l'évolution de toutes vos métriques dans le temps. Vous pouvez sélectionner les métriques à afficher en cochant les cases correspondantes dans la légende. Chaque métrique utilise une couleur distincte pour faciliter la lecture.
+
+Les contrôles temporels vous permettent de choisir la période d'affichage : dernière heure, dernières 24 heures, dernière semaine, ou dernier mois. Pour des analyses plus spécifiques, utilisez le sélecteur de dates personnalisé pour définir exactement la période qui vous intéresse.
+
+L'interaction avec le graphique révèle des informations détaillées. Survolez n'importe quel point pour voir les valeurs exactes à ce moment précis. Cliquez et glissez pour zoomer sur une période spécifique. Double-cliquez pour revenir à la vue complète.
+
+### Alertes Récentes
+
+Le panneau des alertes récentes sur le côté droit du dashboard vous tient informé des événements importants de votre bunker. Les alertes sont triées par ordre chronologique avec les plus récentes en haut. Chaque alerte affiche l'heure, le type d'événement, et un message descriptif.
+
+Les codes couleur vous permettent d'identifier rapidement la criticité : vert pour les informations, jaune pour les avertissements, orange pour les alertes, et rouge pour les urgences. Cliquez sur une alerte pour voir tous les détails et les actions recommandées.
+
+Le système de notification vous alerte automatiquement des nouvelles alertes même si vous n'êtes pas sur la page du dashboard. Un badge numéroté apparaît sur l'icône d'alertes dans la navigation principale pour indiquer le nombre d'alertes non lues.
+
+### Actions Rapides
+
+Le dashboard inclut des boutons d'action rapide pour les opérations les plus courantes. Le bouton "Actualiser" force une mise à jour immédiate de toutes les données. Le bouton "Rapport" génère un résumé PDF de l'état actuel de votre bunker que vous pouvez sauvegarder ou imprimer.
+
+Le bouton "Mode Urgence" active un affichage simplifié avec seulement les informations critiques, optimisé pour les situations de stress où vous avez besoin d'informations essentielles rapidement. Ce mode utilise des polices plus grandes et des couleurs plus contrastées.
+
+Les actions de partage vous permettent d'envoyer des captures d'écran du dashboard à votre équipe ou aux services d'urgence. Ces captures incluent automatiquement un timestamp et les informations de localisation de votre bunker.
+
+## Système de Quiz
+
+### Types de Quiz Disponibles
+
+Le système de quiz de Lataupe Bunker Tech propose trois catégories principales adaptées aux différents aspects de la survie en bunker. Les quiz de Survie couvrent les compétences fondamentales : gestion des ressources vitales, rationnement alimentaire, purification de l'eau, et maintien de la santé physique et mentale en milieu confiné.
+
+Les quiz d'Urgences se concentrent sur les procédures critiques : évacuation d'urgence, premiers secours, gestion des pannes d'équipement, et communication avec l'extérieur. Ces quiz incluent des simulations de scénarios réalistes qui testent votre capacité à prendre des décisions rapides sous pression.
+
+Les quiz de Maintenance abordent les aspects techniques : entretien des systèmes de ventilation, maintenance des générateurs, diagnostic des pannes, et réparations d'urgence. Ces quiz incluent des diagrammes interactifs et des vidéos explicatives pour illustrer les procédures complexes.
+
+### Système d'Apprentissage Adaptatif
+
+L'intelligence artificielle intégrée analyse vos performances pour personnaliser votre expérience d'apprentissage. Le système identifie vos points forts et vos domaines d'amélioration pour proposer des quiz ciblés qui renforcent vos compétences les plus faibles.
+
+La difficulté des questions s'ajuste automatiquement selon vos résultats. Si vous réussissez facilement, le système propose des questions plus complexes. Si vous rencontrez des difficultés, il revient sur les concepts fondamentaux avec des explications détaillées.
+
+Le planning de révision optimise la mémorisation à long terme en vous proposant de revoir les concepts selon des intervalles calculés scientifiquement. Cette approche, basée sur la courbe de l'oubli d'Ebbinghaus, maximise la rétention des connaissances critiques.
+
+### Interface de Quiz
+
+L'interface de quiz est conçue pour minimiser les distractions et maximiser la concentration. Chaque question est présentée clairement avec des options de réponse bien espacées pour éviter les erreurs de sélection, particulièrement importantes sur les écrans tactiles.
+
+Le timer en haut de l'écran vous indique le temps restant pour chaque question. Vous pouvez désactiver le timer dans les paramètres si vous préférez prendre votre temps, mais gardez à l'esprit que la rapidité de réaction peut être cruciale en situation réelle.
+
+La barre de progression montre votre avancement dans le quiz avec le nombre de questions restantes. Vous pouvez naviguer entre les questions déjà répondues pour réviser vos réponses avant de soumettre le quiz final.
+
+### Résultats et Analyses
+
+Après chaque quiz, vous recevez un rapport détaillé de vos performances avec votre score global, le temps moyen par question, et une analyse par domaine de compétence. Les questions incorrectes sont expliquées avec des références vers des ressources d'apprentissage supplémentaires.
+
+L'historique de vos performances vous permet de suivre votre progression dans le temps. Les graphiques montrent l'évolution de vos scores par catégorie et identifient les domaines où vous vous améliorez le plus rapidement.
+
+Les badges et récompenses gamifient l'expérience d'apprentissage. Vous débloquez des badges pour différents accomplissements : séries de bonnes réponses, amélioration rapide, maîtrise d'un domaine spécifique. Ces récompenses motivent l'apprentissage continu.
+
+## Gestion des Alertes
+
+### Types d'Alertes
+
+Le système d'alertes de Lataupe Bunker Tech surveille continuellement votre bunker et génère automatiquement des notifications selon quatre niveaux de criticité. Les alertes d'Information vous tiennent au courant des événements normaux : maintenance programmée réussie, mise à jour des données, ou changements de configuration.
+
+Les Avertissements signalent des situations qui nécessitent votre attention mais ne sont pas immédiatement critiques : niveau de ressources qui diminue, légère dérive des paramètres environnementaux, ou maintenance préventive recommandée. Ces alertes vous donnent le temps de planifier des actions correctives.
+
+Les Alertes indiquent des conditions qui nécessitent une action rapide : seuils critiques atteints, dysfonctionnement d'équipement, ou conditions environnementales dégradées. Ces situations peuvent évoluer vers des urgences si elles ne sont pas traitées promptement.
+
+Les Urgences signalent des dangers immédiats pour la sécurité : niveaux d'oxygène critiquement bas, température extrême, panne de systèmes vitaux, ou détection de gaz toxiques. Ces alertes déclenchent automatiquement des procédures d'urgence et des notifications multi-canaux.
+
+### Configuration des Seuils
+
+Vous pouvez personnaliser les seuils d'alerte pour chaque métrique selon les spécificités de votre bunker et vos préférences personnelles. L'interface de configuration présente des curseurs intuitifs pour ajuster les valeurs limites avec une prévisualisation en temps réel de l'impact sur vos données historiques.
+
+Les seuils adaptatifs utilisent l'intelligence artificielle pour ajuster automatiquement les limites selon les patterns historiques et les conditions saisonnières. Cette fonctionnalité réduit les fausses alertes tout en maintenant une surveillance efficace des conditions anormales.
+
+Les profils de seuils prédéfinis correspondent à différents types de bunkers et situations : bunker familial, abri d'urgence temporaire, installation de long terme. Vous pouvez partir d'un profil existant et l'ajuster selon vos besoins spécifiques.
+
+### Notifications Multi-Canaux
+
+Le système de notification utilise plusieurs canaux pour garantir que vous recevez toujours les alertes critiques. Les notifications push sur vos appareils mobiles apparaissent instantanément même si l'application n'est pas ouverte. Ces notifications incluent des actions rapides pour acquitter l'alerte ou voir les détails.
+
+Les alertes email fournissent des informations détaillées avec des graphiques et des recommandations d'action. Vous pouvez configurer des adresses email multiples pour inclure les membres de votre famille ou votre équipe de sécurité.
+
+Pour les urgences critiques, le système peut envoyer des SMS et même passer des appels téléphoniques automatiques avec des messages vocaux pré-enregistrés. Ces canaux de dernier recours garantissent que vous êtes alerté même si vos autres appareils ne sont pas disponibles.
+
+### Gestion et Historique
+
+L'interface de gestion des alertes vous permet de voir toutes les alertes actives et leur statut. Vous pouvez acquitter les alertes pour indiquer que vous en avez pris connaissance, ajouter des notes sur les actions entreprises, et marquer les alertes comme résolues.
+
+L'historique complet des alertes est conservé avec des capacités de recherche et de filtrage avancées. Vous pouvez analyser les patterns d'alertes pour identifier les problèmes récurrents et optimiser la maintenance préventive de votre bunker.
+
+Les rapports d'alertes automatiques résument l'activité sur des périodes définies : quotidien, hebdomadaire, mensuel. Ces rapports incluent des statistiques sur les types d'alertes, les temps de résolution, et les tendances à long terme.
+
+## Fonctionnalités Mobiles
+
+### Application Web Progressive (PWA)
+
+Lataupe Bunker Tech utilise la technologie PWA pour offrir une expérience mobile native sans nécessiter de téléchargement depuis un app store. Lorsque vous visitez l'application sur votre smartphone, le navigateur vous propose automatiquement de l'installer sur votre écran d'accueil.
+
+Une fois installée, l'application fonctionne exactement comme une app native avec une icône sur votre écran d'accueil, des notifications push, et la capacité de fonctionner hors ligne. L'application se met à jour automatiquement en arrière-plan pour toujours avoir la dernière version.
+
+L'interface mobile est spécialement optimisée pour les écrans tactiles avec des boutons plus grands, des gestes intuitifs, et une navigation simplifiée. Tous les éléments respectent les guidelines d'accessibilité tactile avec une taille minimale de 44 pixels pour faciliter l'utilisation.
+
+### Mode Hors Ligne
+
+La fonctionnalité hors ligne est cruciale pour un système de gestion de bunker qui doit fonctionner même sans connexion internet. L'application cache automatiquement toutes les données récentes et les fonctionnalités essentielles pour garantir l'accès aux informations critiques.
+
+Lorsque vous êtes hors ligne, vous pouvez toujours consulter les dernières métriques, répondre aux quiz, et voir l'historique des alertes. Vos actions sont stockées localement et synchronisées automatiquement dès que la connexion est rétablie.
+
+L'indicateur de statut de connexion vous informe clairement si vous êtes en ligne, hors ligne, ou en cours de synchronisation. Un badge indique le nombre d'actions en attente de synchronisation pour vous tenir informé de l'état de vos données.
+
+### Optimisations Tactiles
+
+L'interface tactile supporte des gestes naturels qui accélèrent la navigation. Glissez horizontalement sur les cartes de métriques pour naviguer rapidement entre les différentes vues. Pincez pour zoomer sur les graphiques et explorez les détails avec des gestes de glissement.
+
+Les listes supportent le pull-to-refresh : tirez vers le bas pour actualiser les données. Ce geste familier fonctionne sur toutes les pages de l'application pour une expérience cohérente.
+
+Les actions contextuelles sont accessibles par glissement horizontal sur les éléments de liste. Glissez une alerte vers la droite pour l'acquitter, vers la gauche pour la supprimer. Ces gestes réduisent le nombre de taps nécessaires pour les actions courantes.
+
+### Notifications Push
+
+Les notifications push mobiles vous alertent instantanément des événements critiques même si l'application n'est pas ouverte. Ces notifications apparaissent sur votre écran de verrouillage et dans le centre de notifications de votre appareil.
+
+Chaque notification inclut des actions rapides qui vous permettent de réagir immédiatement : "Voir les détails", "Acquitter", ou "Appeler l'urgence". Ces actions évitent d'avoir à ouvrir l'application pour les réponses simples.
+
+La gestion intelligente des notifications évite le spam en groupant les alertes similaires et en respectant vos heures de silence configurées. Les urgences critiques outrepassent ces restrictions pour garantir que vous êtes toujours alerté des dangers immédiats.
+
+## Paramètres et Personnalisation
+
+### Profil Utilisateur
+
+Votre profil utilisateur centralise toutes vos informations personnelles et préférences d'utilisation. Vous pouvez mettre à jour votre nom, adresse email, et photo de profil. La photo apparaît dans la barre de navigation et personnalise votre expérience.
+
+Les informations de contact d'urgence sont cruciales pour un système de gestion de bunker. Vous pouvez configurer plusieurs contacts qui seront automatiquement notifiés en cas d'urgence critique. Ces contacts peuvent inclure des membres de famille, des services d'urgence locaux, ou votre équipe de sécurité.
+
+Les préférences de langue permettent d'utiliser l'application dans votre langue native. L'interface supporte plusieurs langues avec une traduction complète de tous les textes, messages d'alerte, et contenus de quiz.
+
+### Configuration du Bunker
+
+La section de configuration du bunker vous permet de définir les caractéristiques spécifiques de votre installation. Entrez la localisation géographique, la capacité d'accueil, et les équipements installés. Ces informations personnalisent les seuils d'alerte et les recommandations.
+
+La configuration des capteurs vous permet de mapper vos équipements physiques avec l'application. Définissez les types de capteurs installés, leurs emplacements, et leurs caractéristiques techniques. Cette configuration améliore la précision des alertes et des analyses.
+
+Les paramètres de maintenance incluent les calendriers d'entretien préventif, les contacts de techniciens spécialisés, et l'historique des interventions. Ces informations aident à planifier la maintenance et à diagnostiquer les problèmes récurrents.
+
+### Préférences d'Interface
+
+Les préférences d'interface vous permettent de personnaliser l'apparence et le comportement de l'application selon vos goûts et besoins. Le choix du thème inclut un mode sombre optimisé pour les environnements de bunker avec un éclairage réduit, et un mode clair pour une utilisation en conditions normales.
+
+La densité d'affichage ajuste la quantité d'informations visible simultanément. Le mode compact affiche plus de données sur chaque écran, tandis que le mode spacieux privilégie la lisibilité avec des éléments plus grands et plus d'espacement.
+
+Les préférences de graphiques contrôlent l'apparence des visualisations : couleurs des courbes, type de graphique par défaut, et niveau de détail affiché. Vous pouvez également choisir les métriques affichées par défaut sur le dashboard.
+
+### Sécurité et Confidentialité
+
+Les paramètres de sécurité vous permettent de configurer l'authentification multi-facteurs pour renforcer la protection de votre compte. Vous pouvez utiliser une application d'authentification mobile, recevoir des codes par SMS, ou utiliser une clé de sécurité physique.
+
+La gestion des sessions actives vous montre tous les appareils connectés à votre compte avec leur localisation et date de dernière activité. Vous pouvez déconnecter à distance les sessions suspectes ou les appareils que vous n'utilisez plus.
+
+Les paramètres de confidentialité contrôlent le partage de vos données anonymisées pour l'amélioration du service. Vous pouvez choisir de contribuer aux statistiques globales tout en gardant vos informations personnelles privées.
+
+## Dépannage et Support
+
+### Problèmes Courants
+
+Les problèmes de connexion sont les plus fréquents et généralement faciles à résoudre. Si l'application ne se connecte pas, vérifiez d'abord votre connexion internet en essayant d'accéder à d'autres sites web. Redémarrez votre routeur si nécessaire et attendez quelques minutes avant de réessayer.
+
+Si les données ne se mettent pas à jour, utilisez le bouton d'actualisation manuelle sur le dashboard. L'application cache les données pour améliorer les performances, mais parfois un rafraîchissement manuel est nécessaire pour voir les dernières informations.
+
+Les problèmes de notifications push sur mobile se résolvent généralement en vérifiant les paramètres de notification de votre appareil. Assurez-vous que les notifications sont autorisées pour l'application et que le mode "Ne pas déranger" n'est pas activé.
+
+### Diagnostic Automatique
+
+L'outil de diagnostic intégré analyse automatiquement votre configuration et identifie les problèmes potentiels. Accédez-y depuis le menu d'aide pour lancer une vérification complète de votre système.
+
+Le diagnostic vérifie la connectivité réseau, la synchronisation des données, le fonctionnement des notifications, et la configuration des capteurs. Un rapport détaillé identifie les problèmes trouvés avec des suggestions de résolution.
+
+Les tests de performance mesurent les temps de réponse de votre connexion et identifient les goulots d'étranglement potentiels. Ces informations aident l'équipe de support à diagnostiquer les problèmes de performance.
+
+### Contact du Support
+
+L'équipe de support technique est disponible 24/7 pour les urgences critiques liées à la sécurité de votre bunker. Pour les problèmes non urgents, utilisez le système de tickets intégré qui garantit un suivi personnalisé de votre demande.
+
+Le chat en direct vous connecte immédiatement avec un technicien qualifié pendant les heures ouvrables. Cette option est idéale pour les questions rapides et le dépannage en temps réel.
+
+La base de connaissances contient des articles détaillés sur tous les aspects de l'application. Utilisez la fonction de recherche pour trouver rapidement des réponses à vos questions les plus courantes.
+
+### Mises à Jour et Maintenance
+
+L'application se met à jour automatiquement en arrière-plan pour toujours bénéficier des dernières fonctionnalités et corrections de sécurité. Vous recevez une notification lorsqu'une mise à jour importante est disponible.
+
+Les maintenances programmées sont annoncées à l'avance avec des notifications dans l'application et par email. Ces maintenances sont planifiées pendant les heures de faible activité pour minimiser l'impact sur votre utilisation.
+
+L'historique des versions vous permet de voir toutes les améliorations apportées à l'application. Chaque mise à jour inclut des notes détaillées sur les nouvelles fonctionnalités, les corrections de bugs, et les améliorations de performance.
+
+## FAQ
+
+### Questions Générales
+
+**Q: L'application fonctionne-t-elle sans internet ?**R: Oui, la plupart des fonctionnalités restent disponibles hors ligne grâce à la technologie PWA. Vous pouvez consulter les données récentes, répondre aux quiz, et voir l'historique des alertes. La synchronisation reprend automatiquement dès que la connexion est rétablie.
+
+**Q: Sur quels appareils puis-je utiliser l'application ?**R: L'application fonctionne sur tous les navigateurs modernes : Chrome, Firefox, Safari, Edge. Elle s'adapte automatiquement aux smartphones, tablettes, et ordinateurs. L'installation PWA est disponible sur iOS et Android.
+
+**Q: Mes données sont-elles sécurisées ?**R: Absolument. Toutes les données sont chiffrées avec des algorithmes de niveau militaire. L'authentification multi-facteurs protège votre compte, et nos serveurs respectent les standards de sécurité les plus stricts.
+
+### Questions Techniques
+
+**Q: Comment configurer les seuils d'alerte ?**R: Allez dans Paramètres > Configuration Bunker > Seuils d'Alerte. Utilisez les curseurs pour ajuster les valeurs limites pour chaque métrique. Les changements prennent effet immédiatement.
+
+**Q: Puis-je exporter mes données ?**R: Oui, vous pouvez exporter toutes vos données au format CSV ou PDF depuis la section Paramètres > Données. L'export inclut l'historique des métriques, des alertes, et des résultats de quiz.
+
+**Q: Comment ajouter d'autres utilisateurs à mon bunker ?**R: Utilisez la fonction d'invitation dans Paramètres > Gestion Utilisateurs. Envoyez des invitations par email avec des niveaux de permission personnalisés : administrateur, opérateur, ou observateur.
+
+### Questions de Dépannage
+
+**Q: Les notifications push ne fonctionnent pas sur mon téléphone.**R: Vérifiez que les notifications sont autorisées dans les paramètres de votre navigateur et de votre téléphone. Réinstallez l'application PWA si le problème persiste.
+
+**Q: Les graphiques ne s'affichent pas correctement.**R: Videz le cache de votre navigateur et actualisez la page. Assurez-vous que JavaScript est activé. Contactez le support si le problème persiste.
+
+**Q: Comment récupérer mon mot de passe oublié ?**R: Utilisez le lien "Mot de passe oublié" sur la page de connexion. Vous recevrez un email avec des instructions pour créer un nouveau mot de passe sécurisé.
+
+---
+
+## Conclusion
+
+Ce guide utilisateur vous accompagne dans la découverte et la maîtrise de Lataupe Bunker Tech. L'application évolue constamment avec de nouvelles fonctionnalités et améliorations basées sur vos retours et besoins.
+
+N'hésitez pas à explorer toutes les fonctionnalités et à personnaliser l'application selon vos préférences. L'équipe de support reste disponible pour vous aider à tirer le meilleur parti de votre système de gestion de bunker.
+
+Votre sécurité et celle de vos proches sont notre priorité absolue. Lataupe Bunker Tech vous donne les outils nécessaires pour maintenir un environnement de survie optimal en toutes circonstances.
+
+---
+
+*Ce guide est mis à jour régulièrement pour refléter les évolutions de l'application. Consultez la version en ligne pour avoir toujours les informations les plus récentes.*
+

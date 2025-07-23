@@ -1,0 +1,108 @@
+{
+  "categories": [
+    {
+      "name": "Survival Basics",
+      "description": "Essential survival skills for bunker life",
+      "icon": "\ud83c\udfe0",
+      "quizzes": [
+        {
+          "title": "Air Quality Management",
+          "description": "Understanding and maintaining air quality in enclosed spaces",
+          "difficulty": "medium",
+          "required_for_role": "resident",
+          "is_mandatory": true,
+          "time_limit": 300,
+          "passing_score": 80,
+          "questions": [
+            {
+              "question_text": "What is the ideal oxygen level for a bunker environment?",
+              "question_type": "multiple_choice",
+              "options": [
+                "16-18%",
+                "19-21%",
+                "22-24%",
+                "25-27%"
+              ],
+              "correct_answer": "19-21%",
+              "explanation": "Normal atmospheric oxygen levels are 20.9%. Levels below 19% can cause hypoxia.",
+              "points": 2
+            },
+            {
+              "question_text": "CO2 levels above 1000 PPM indicate poor ventilation.",
+              "question_type": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correct_answer": "True",
+              "explanation": "CO2 levels above 1000 PPM indicate inadequate ventilation and can cause drowsiness.",
+              "points": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Emergency Procedures",
+      "description": "Critical emergency response protocols",
+      "icon": "\ud83d\udea8",
+      "quizzes": [
+        {
+          "title": "Radiation Detection",
+          "description": "Identifying and responding to radiation threats",
+          "difficulty": "hard",
+          "required_for_role": "security",
+          "is_mandatory": true,
+          "time_limit": 600,
+          "passing_score": 85,
+          "questions": [
+            {
+              "question_text": "What radiation level requires immediate evacuation?",
+              "question_type": "multiple_choice",
+              "options": [
+                "1 \u00b5Sv/h",
+                "10 \u00b5Sv/h",
+                "100 \u00b5Sv/h",
+                "1000 \u00b5Sv/h"
+              ],
+              "correct_answer": "100 \u00b5Sv/h",
+              "explanation": "Levels above 100 \u00b5Sv/h require immediate protective action.",
+              "points": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "System Maintenance",
+      "description": "Technical maintenance and troubleshooting",
+      "icon": "\ud83d\udd27",
+      "quizzes": [
+        {
+          "title": "HVAC System Basics",
+          "description": "Understanding heating, ventilation, and air conditioning systems",
+          "difficulty": "expert",
+          "required_for_role": "admin",
+          "is_mandatory": false,
+          "time_limit": 900,
+          "passing_score": 90,
+          "questions": [
+            {
+              "question_text": "What is the primary function of a HEPA filter?",
+              "question_type": "multiple_choice",
+              "options": [
+                "Remove odors",
+                "Remove particles \u22650.3 microns",
+                "Remove gases",
+                "Regulate temperature"
+              ],
+              "correct_answer": "Remove particles \u22650.3 microns",
+              "explanation": "HEPA filters remove 99.97% of particles 0.3 microns or larger.",
+              "points": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

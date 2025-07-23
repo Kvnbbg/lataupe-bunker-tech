@@ -1,87 +1,40 @@
-from flask import Blueprint, request, jsonify, session
-from src.models.user import db, User
-from src.models.bunker import BunkerUser
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
-user_bp = Blueprint('user', __name__, url_prefix='/api/user')
+db = SQLAlchemy()
 
-@user_bp.route('/profile', methods=['GET'])
-def get_profile():
-    """Get user profile information."""
-    if 'user_id' not in session:
-        return jsonify({'error': 'Not authenticated'}), 401
+class User(db.Model):
+    __tablename__ = 'users'
     
-    user = User.query.get(session['user_id'])
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-    
-    bunker_user = BunkerUser.query.filter_by(user_id=user.id).first()
-    
-    profile_data = user.to_dict()
-    if bunker_user:
-        profile_data.update({
-            'bunker_id': bunker_user.bunker_id,
-            'access_level': bunker_user.access_level,
-            'room_assignment': bunker_user.room_assignment,
-            'emergency_contact': bunker_user.emergency_contact
-        })
-    
-    return jsonify(profile_data)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(50), nullable=False, default='resident')
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_login = db.Column(db.DateTime)
 
-@user_bp.route('/profile', methods=['PUT'])
-def update_profile():
-    """Update user profile information."""
-    if 'user_id' not in session:
-        return jsonify({'error': 'Not authenticated'}), 401
-    
-    user = User.query.get(session['user_id'])
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-    
-    data = request.get_json()
-    
-    # Update basic user info
-    if 'email' in data:
-        user.email = data['email']
-    
-    # Update bunker-specific info
-    bunker_user = BunkerUser.query.filter_by(user_id=user.id).first()
-    if bunker_user:
-        if 'emergency_contact' in data:
-            bunker_user.emergency_contact = data['emergency_contact']
-        if 'medical_info' in data:
-            bunker_user.medical_info = data['medical_info']
-    
-    try:
-        db.session.commit()
-        return jsonify({'message': 'Profile updated successfully'})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'Failed to update profile'}), 500
+    def set_password(self, password):
+        """Hash and set the password."""
+        self.password_hash = generate_password_hash(password)
 
-@user_bp.route('/change-password', methods=['POST'])
-def change_password():
-    """Change user password."""
-    if 'user_id' not in session:
-        return jsonify({'error': 'Not authenticated'}), 401
-    
-    user = User.query.get(session['user_id'])
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-    
-    data = request.get_json()
-    
-    if not all(key in data for key in ['current_password', 'new_password']):
-        return jsonify({'error': 'Current password and new password are required'}), 400
-    
-    if not user.check_password(data['current_password']):
-        return jsonify({'error': 'Current password is incorrect'}), 400
-    
-    user.set_password(data['new_password'])
-    
-    try:
-        db.session.commit()
-        return jsonify({'message': 'Password changed successfully'})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'Failed to change password'}), 500
+    def check_password(self, password):
+        """Check if the provided password matches the hash."""
+        return check_password_hash(self.password_hash, password)
+
+    def to_dict(self):
+        """Convert user object to dictionary."""
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'role': self.role,
+            'is_active': self.is_active,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'last_login': self.last_login.isoformat() if self.last_login else None
+        }
+
+    def __repr__(self):
+        return f'<User {self.username}>'

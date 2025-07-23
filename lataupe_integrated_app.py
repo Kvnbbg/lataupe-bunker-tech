@@ -1251,6 +1251,83 @@ def login():
         bunker_logger.error("Login error", exc_info=True)
         return jsonify({'error': 'Login failed'}), 500
 
+@app.route('/api/auth/register', methods=['POST'])
+def register():
+    """User registration with enhanced validation"""
+    try:
+        # Rate limiting
+        client_ip = request.remote_addr
+        if not SecurityManager.rate_limit_check(f"register_{client_ip}", max_requests=5, window=300):
+            bunker_logger.warning(f"Rate limit exceeded for registration from {client_ip}")
+            return jsonify({'error': 'Too many registration attempts. Please try again later.'}), 429
+        
+        # Validate input
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        schema = RegisterSchema()
+        try:
+            validated_data = schema.load(data)
+        except ValidationError as err:
+            bunker_logger.warning(f"Registration validation failed: {err.messages}")
+            return jsonify({'error': 'Validation failed', 'details': err.messages}), 400
+        
+        # Sanitize inputs
+        username = SecurityManager.sanitize_input(validated_data['username'])
+        email = SecurityManager.sanitize_input(validated_data['email'])
+        password = validated_data['password']
+        confirm_password = validated_data['confirm_password']
+        
+        # Additional validation
+        if password != confirm_password:
+            return jsonify({'error': 'Passwords do not match'}), 400
+        
+        if not SecurityManager.validate_email(email):
+            return jsonify({'error': 'Invalid email format'}), 400
+        
+        password_validation = SecurityManager.validate_password(password)
+        if not password_validation['valid']:
+            return jsonify({
+                'error': 'Password does not meet requirements',
+                'details': password_validation['errors']
+            }), 400
+        
+        # Check if user already exists
+        if User.query.filter_by(username=username).first():
+            return jsonify({'error': 'Username already exists'}), 400
+        
+        if User.query.filter_by(email=email).first():
+            return jsonify({'error': 'Email already registered'}), 400
+        
+        # Create new user
+        user = User(
+            username=username,
+            email=email,
+            role='resident',
+            is_premium=False,
+            premium_tier='free'
+        )
+        user.set_password(password)
+        
+        db.session.add(user)
+        db.session.commit()
+        
+        # Generate token
+        token = AuthService.generate_token(user)
+        
+        bunker_logger.info(f"New user registered: {username}")
+        return jsonify({
+            'success': True,
+            'message': 'Registration successful',
+            'token': token,
+            'user': user.to_dict()
+        }), 201
+        
+    except Exception as e:
+        bunker_logger.error("Registration error", exc_info=True)
+        return jsonify({'error': 'Registration failed'}), 500
+
 @app.route('/api/environmental/current')
 def get_current_environmental():
     """Get current environmental data"""
@@ -1357,96 +1434,249 @@ def run_api_tests():
         bunker_logger.error("Test execution failed", exc_info=True)
         return jsonify({'error': 'Test execution failed'}), 500
 
-# ============================================================================
-# TELEGRAM BOT INTEGRATION
-# ============================================================================
+@app.route('/api/translate', methods=['GET'])
+def translate_text():
+    """Translation service for multi-language support"""
+    try {
+        lang = request.args.get('lang', 'en');
+        
+        # Translation dictionaries
+        translations = {
+            'en': {
+                'welcome': 'Welcome to the Underground',
+                'dashboard': 'Bunker Dashboard',
+                'temperature': 'Temperature',
+                'oxygen': 'Oxygen Level',
+                'radiation': 'Radiation',
+                'alerts': 'Active Alerts',
+                'premium': 'Premium Features',
+                'login': 'Login',
+                'register': 'Register',
+                'username': 'Username',
+                'password': 'Password',
+                'email': 'Email',
+                'confirm_password': 'Confirm Password',
+                'enter_bunker': 'Enter Bunker',
+                'go_premium': 'Go Premium',
+                'support_project': 'Support the Project',
+                'connect': 'Connect',
+                'environmental_trends': 'Environmental Trends',
+                'system_status': 'System Status',
+                'operational': 'Operational',
+                'warning': 'Warning',
+                'critical': 'Critical',
+                'current_plan': 'Current Plan',
+                'upgrade': 'Upgrade',
+                'coming_soon': 'Coming Soon',
+                'free_tier': 'Free',
+                'pro_tier': 'Taupe Pro+',
+                'ultra_tier': 'Taupe Ultra'
+            },
+            'fr': {
+                'welcome': 'Bienvenue dans le Souterrain',
+                'dashboard': 'Tableau de Bord du Bunker',
+                'temperature': 'Température',
+                'oxygen': 'Niveau d\'Oxygène',
+                'radiation': 'Radiation',
+                'alerts': 'Alertes Actives',
+                'premium': 'Fonctionnalités Premium',
+                'login': 'Connexion',
+                'register': 'S\'inscrire',
+                'username': 'Nom d\'utilisateur',
+                'password': 'Mot de passe',
+                'email': 'Email',
+                'confirm_password': 'Confirmer le mot de passe',
+                'enter_bunker': 'Entrer dans le Bunker',
+                'go_premium': 'Passer Premium',
+                'support_project': 'Soutenir le Projet',
+                'connect': 'Se Connecter',
+                'environmental_trends': 'Tendances Environnementales',
+                'system_status': 'État du Système',
+                'operational': 'Opérationnel',
+                'warning': 'Avertissement',
+                'critical': 'Critique',
+                'current_plan': 'Plan Actuel',
+                'upgrade': 'Mettre à niveau',
+                'coming_soon': 'Bientôt Disponible',
+                'free_tier': 'Gratuit',
+                'pro_tier': 'Taupe Pro+',
+                'ultra_tier': 'Taupe Ultra'
+            }
+        };
+        
+        selected_translations = translations.get(lang, translations['en']);
+        
+        bunker_logger.info(f"Translation requested for language: {lang}");
+        return jsonify({
+            'success': True,
+            'language': lang,
+            'translations': selected_translations
+        });
+        
+    } catch (Exception e) {
+        bunker_logger.error("Translation error", exc_info=True);
+        return jsonify({'error': 'Translation failed'}), 500;
+    }
 
-@app.route('/api/telegram/webapp')
-def telegram_webapp():
-    """Telegram Web App integration"""
-    telegram_template = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Lataupe Bunker - Telegram</title>
-        <script src="https://telegram.org/js/telegram-web-app.js"></script>
-        <style>
-            body { 
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                margin: 0; padding: 20px; 
-                background: var(--tg-theme-bg-color, #1a1a1a);
-                color: var(--tg-theme-text-color, #ffffff);
-            }
-            .card { 
-                background: var(--tg-theme-secondary-bg-color, #2d2d2d);
-                border-radius: 12px; padding: 16px; margin: 16px 0;
-            }
-            .btn {
-                background: var(--tg-theme-button-color, #3390ec);
-                color: var(--tg-theme-button-text-color, #ffffff);
-                border: none; border-radius: 8px; padding: 12px 24px;
-                font-size: 16px; cursor: pointer; width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <h2>🏠 Bunker Status</h2>
-            <p>Temperature: <span id="temp">Loading...</span></p>
-            <p>Oxygen: <span id="oxygen">Loading...</span></p>
-            <p>Alerts: <span id="alerts">Loading...</span></p>
-        </div>
+@app.route('/api/alerts/resolve/<int:alert_id>', methods=['POST'])
+@AuthService.require_auth
+def resolve_alert(alert_id):
+    """Resolve an alert with authentication required"""
+    try:
+        user = g.current_user
         
-        <div class="card">
-            <h3>🎵 Music Bunker Bot</h3>
-            <p>Access via: <a href="https://t.me/musicbunkerbot">@musicbunkerbot</a></p>
-            <button class="btn" onclick="openMusicBot()">Open Music Bot</button>
-        </div>
+        # Validate input
+        if not alert_id or alert_id <= 0:
+            return jsonify({'error': 'Invalid alert ID'}), 400
         
-        <div class="card">
-            <h3>⭐ Premium Features</h3>
-            <button class="btn" onclick="showPremium()">Upgrade to Premium</button>
-        </div>
+        success = AlertService.resolve_alert(alert_id, user.username)
         
-        <script>
-            // Initialize Telegram WebApp
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
+        if success:
+            bunker_logger.info(f"Alert {alert_id} resolved by {user.username}")
+            return jsonify({
+                'success': True,
+                'message': 'Alert resolved successfully'
+            })
+        else:
+            return jsonify({'error': 'Alert not found or already resolved'}), 404
             
-            // Load bunker data
-            async function loadData() {
-                try {
-                    const response = await fetch('/api/environmental/current?bunker_id=bunker-01');
-                    const data = await response.json();
-                    
-                    document.getElementById('temp').textContent = data.temperature?.toFixed(1) + '°C' || 'N/A';
-                    document.getElementById('oxygen').textContent = data.oxygen_level?.toFixed(1) + '%' || 'N/A';
-                    
-                    const alertsResponse = await fetch('/api/alerts/active?bunker_id=bunker-01');
-                    const alertsData = await alertsResponse.json();
-                    document.getElementById('alerts').textContent = alertsData.count || '0';
-                } catch (error) {
-                    console.error('Error loading data:', error);
-                }
+    except Exception as e:
+        bunker_logger.error("Error resolving alert", exc_info=True)
+        return jsonify({'error': 'Failed to resolve alert'}), 500
+
+@app.route('/api/user/profile', methods=['GET'])
+@AuthService.require_auth
+def get_user_profile():
+    """Get user profile with gamification data"""
+    try:
+        user = g.current_user
+        
+        # Calculate gamification stats
+        gamification_data = {
+            'level': min(1 + (user.id * 7) % 20, 50),  # Mock level calculation
+            'xp': (user.id * 123) % 1000,
+            'next_level_xp': 1000,
+            'badges': [
+                {'name': 'Bunker Resident', 'earned': True, 'icon': 'fas fa-home'},
+                {'name': 'Temperature Monitor', 'earned': True, 'icon': 'fas fa-thermometer-half'},
+                {'name': 'Alert Resolver', 'earned': user.id % 3 == 0, 'icon': 'fas fa-bell'},
+                {'name': 'Premium Member', 'earned': user.is_premium, 'icon': 'fas fa-crown'}
+            ]
+        }
+        
+        bunker_logger.info(f"Profile retrieved for user: {user.username}")
+        return jsonify({
+            'success': True,
+            'user': user.to_dict(),
+            'gamification': gamification_data,
+            'premium_info': PremiumService.get_user_tier_info(user)
+        })
+        
+    except Exception as e:
+        bunker_logger.error("Error getting user profile", exc_info=True)
+        return jsonify({'error': 'Failed to get profile'}), 500
+
+@app.route('/api/slides/story', methods=['GET'])
+def get_story_slides():
+    """Get story slides for onboarding"""
+    try:
+        slides = [
+            {
+                'id': 1,
+                'title': 'The Ozone Crisis',
+                'content': 'The ozone layer has been severely damaged. Surface life is no longer safe.',
+                'image': '/static/images/ozone_crisis.jpg',
+                'audio': '/static/music/background.mp3'
+            },
+            {
+                'id': 2,
+                'title': 'Underground Living',
+                'content': 'Humanity has moved underground. Bunkers provide safety and survival.',
+                'image': '/static/images/underground_bunker_view.webp',
+                'audio': '/static/music/success.wav'
+            },
+            {
+                'id': 3,
+                'title': 'Technology Failure',
+                'content': 'Environmental systems can fail. Constant monitoring is essential.',
+                'image': '/static/images/tech_failure.jpg',
+                'audio': '/static/music/error.wav'
+            },
+            {
+                'id': 4,
+                'title': 'Scorched Earth',
+                'content': 'The surface world is hostile. Only the prepared survive.',
+                'image': '/static/images/scorched_earth.jpg',
+                'audio': '/static/music/victory.wav'
+            },
+            {
+                'id': 5,
+                'title': 'Your Mission',
+                'content': 'Monitor, survive, and thrive in the underground world.',
+                'image': '/static/images/mission.jpg',
+                'audio': '/static/music/lauch.wav'
             }
-            
-            function openMusicBot() {
-                window.Telegram.WebApp.openTelegramLink('https://t.me/musicbunkerbot');
+        ]
+        
+        bunker_logger.info("Story slides retrieved")
+        return jsonify({
+            'success': True,
+            'slides': slides,
+            'total_slides': len(slides)
+        })
+        
+    except Exception as e:
+        bunker_logger.error("Error getting story slides", exc_info=True)
+        return jsonify({'error': 'Failed to get story slides'}), 500
+
+@app.route('/api/logs/security', methods=['GET'])
+@AuthService.require_auth
+def get_security_logs():
+    """Get security logs for admin users"""
+    try:
+        user = g.current_user
+        
+        if user.role != 'admin':
+            return jsonify({'error': 'Insufficient permissions'}), 403
+        
+        # Mock security logs - in production, this would query actual logs
+        logs = [
+            {
+                'timestamp': (datetime.utcnow() - timedelta(minutes=5)).isoformat(),
+                'level': 'WARNING',
+                'event': 'Failed login attempt',
+                'ip': '192.168.1.100',
+                'user_agent': 'Mozilla/5.0...',
+                'details': 'Invalid credentials for user: testuser'
+            },
+            {
+                'timestamp': (datetime.utcnow() - timedelta(minutes=10)).isoformat(),
+                'level': 'INFO',
+                'event': 'User login',
+                'ip': '192.168.1.101',
+                'user_agent': 'Mozilla/5.0...',
+                'details': 'Successful login for user: admin'
+            },
+            {
+                'timestamp': (datetime.utcnow() - timedelta(minutes=15)).isoformat(),
+                'level': 'ERROR',
+                'event': 'Rate limit exceeded',
+                'ip': '192.168.1.102',
+                'user_agent': 'Python-requests/2.28.1',
+                'details': 'Too many requests from IP'
             }
-            
-            function showPremium() {
-                window.Telegram.WebApp.openLink('https://buy.stripe.com/14AeVc0uv3dq7U9fVb2B200');
-            }
-            
-            loadData();
-            setInterval(loadData, 30000);
-        </script>
-    </body>
-    </html>
-    """
-    return render_template_string(telegram_template)
+        ]
+        
+        bunker_logger.info(f"Security logs accessed by admin: {user.username}")
+        return jsonify({
+            'success': True,
+            'logs': logs,
+            'count': len(logs)
+        })
+        
+    except Exception as e:
+        bunker_logger.error("Error getting security logs", exc_info=True)
+        return jsonify({'error': 'Failed to get security logs'}), 500
 
 # ============================================================================
 # DATABASE INITIALIZATION

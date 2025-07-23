@@ -1,0 +1,28 @@
+{
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile.railway"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "FLASK_ENV": "production",
+        "PYTHONUNBUFFERED": "1",
+        "PORT": "8080"
+      }
+    },
+    "staging": {
+      "variables": {
+        "FLASK_ENV": "staging",
+        "PYTHONUNBUFFERED": "1",
+        "PORT": "8080"
+      }
+    }
+  }
+}

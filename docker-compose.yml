@@ -1,0 +1,153 @@
+version: '3.8'
+
+services:
+  # Application principale
+  bunker-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bunker-app
+    restart: unless-stopped
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=postgresql://bunker_user:secure_password@postgres:5432/lataupe_bunker
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY}
+      - MASTER_KEY=${MASTER_KEY}
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+      - ./static/uploads:/app/static/uploads
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bunker-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Base de données PostgreSQL
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.postgres
+    container_name: bunker-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=lataupe_bunker
+      - POSTGRES_USER=bunker_user
+      - POSTGRES_PASSWORD=secure_password
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/backups:/backups
+    networks:
+      - bunker-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bunker_user -d lataupe_bunker"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Cache Redis
+  redis:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.redis
+    container_name: bunker-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/var/lib/redis
+    networks:
+      - bunker-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # Reverse Proxy Nginx
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nginx
+    container_name: bunker-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - bunker-app
+    networks:
+      - bunker-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # Monitoring avec Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: bunker-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - bunker-network
+
+  # Visualisation avec Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: bunker-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin_password_change_me
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - bunker-network
+
+# Réseaux
+networks:
+  bunker-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes persistants
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local

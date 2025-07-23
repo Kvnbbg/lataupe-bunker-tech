@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ "Quiz" if session['lang'] == 'en' else "Quizz" }}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block notification %}
+<div id="movableDiv" class="movable">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %} {% for category, message in messages %}
+              <div
+                class="alert alert-{{ category }} alert-dismissible fade show"
+                role="alert"
+              >
+                <strong>{{ category.title() }}:</strong> {{ message }}
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              {% endfor %} {% endif %}
+          {% endwith %}
+          <span id="countdownTimer">
+            <span class="title">{{ "Are you here ?" if session['lang'] == 'en' else "Êtes-vous là ?" }}</span>
+            <span class="emoji-insect" tabindex="0" aria-label="spaceship">🌍☄️🌠</span>
+            </span>
+        </div>
+{% endblock %}
+
+{% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/quiz.css') }}"
+/>
+<!-- Assuming you have a CSS file for custom styles -->
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+
+<!-- Externalizing JS for better structure -->
+<div class="container mt-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="card quiz-info mb-4">
+        <div class="card-body text-center">
+          <p class="card-text">
+            {{ "Select the correct answer and click 'Next' to continue." if
+            session['lang'] == 'en' else "Sélectionnez la bonne réponse et
+            cliquez sur 'Suivant' pour continuer." }}
+          </p>
+        </div>
+      </div>
+
+      <div class="card filter-form mb-4">
+        <div class="card-body">
+          <form action="{{ url_for('main.quiz') }}" method="get">
+            {{ form.hidden_tag() }}
+            <select
+              name="filter"
+              class="form-select"
+              onchange="this.form.submit()"
+            >
+              <option value="questions.json">
+                {{ "Skip to the next question" if session['lang'] == 'en' else "Passer à la question suivante" }}
+              </option>
+              <option value="questions2.json">
+                {{ "⏭️" if session['lang'] == 'en' else "⏭️" }}
+              </option>
+              <option value="questions3.json">
+                {{ "⏮️" if session['lang'] == 'en' else "⏮️" }}
+              </option>
+            </select>
+          </form>
+        </div>
+      </div>
+
+      <div class="card quiz-form shadow-sm">
+        <div class="card-body">
+          <form
+            id="nextQuestionForm"
+            action="{{ url_for('main.quiz') }}"
+            method="post"
+            onsubmit="return validateForm();"
+          >
+            {{ form.hidden_tag() }}
+            <fieldset class="mb-3">
+              <legend class="form-label mb-3">{{ question.question }}</legend>
+              <div
+                id="validationAlert"
+                class="alert alert-warning d-none"
+              ></div>
+              {% for choice in form.choice %}
+              <div class="form-check">
+                {{ choice(class_="form-check-input") }}
+                <label class="form-check-label" for="{{ choice.id }}"
+                  >{{ choice.label.text }}</label
+                >
+              </div>
+              {% endfor %}
+            </fieldset>
+            {{ form.question_id }}
+            <div class="d-flex justify-content-end">
+              {{ form.submit(class="btn btn-primary") }}
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="navigation-buttons mt-4">
+        <a
+          href="{{ url_for('main.home') }}"
+          class="btn btn-outline-secondary"
+          style="background-color: #f0f0f0"
+          >{{ "Home" if session['lang'] == 'en' else "Accueil" }}</a
+        >
+        <a
+          href="{{ url_for('main.quiz') }}"
+          class="btn btn-outline-secondary ms-2"
+          style="background-color: #f1f1f1"
+          >{{ "Refresh" if session['lang'] == 'en' else "Rafraîchir" }}</a
+        >
+        <a
+          href="{{ url_for('main.donate') }}"
+          class="btn btn-outline-secondary ms-2"
+          style="background-color: #f2f2f2"
+          >{{ "About" if session['lang'] == 'en' else "À propos" }}</a
+        >
+        <!-- <div onclick="window.location.href='{{ url_for('main.feedback') }}'" class="btn btn-outline-secondary ms-2">{{ "Feedback" if session['lang'] == 'en' else "Feedback" }}</div>-->
+        <!--
+        <button type="button" id="skipBtn" class="btn btn-outline-secondary ms-2">{{ "Skip" if session['lang'] == 'en' else "Sauter" }}</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
