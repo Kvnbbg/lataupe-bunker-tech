@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from src.models import db
-from src.routes.user import user_bp
+from src.models.user import user_bp
 
 # Import de tous les modèles pour s'assurer qu'ils sont enregistrés
 from src.models import (

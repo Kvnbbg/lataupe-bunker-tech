@@ -3,7 +3,7 @@ from flask import Flask, send_from_directory, jsonify, request
 from flask_cors import CORS
 from src.models.user import db, User
 from src.models.bunker import BunkerUser, EnvironmentalsData, Alert, EmergencyMessage
-from src.routes.user import user_bp
+from src.models.user import user_bp
 from src.routes.auth import auth_bp
 from src.routes.dashboard import dashboard_bp
 from src.routes.emergency import emergency_bp
