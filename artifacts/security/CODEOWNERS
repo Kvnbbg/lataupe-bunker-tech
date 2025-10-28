@@ -1,0 +1,11 @@
+# CODEOWNERS generated as part of the modernization framework adoption.
+# Assign primary ownership to platform and security leads while allowing
+# service-specific experts to review targeted directories.
+
+*               @lataupe-bunker/platform-team
+src/            @lataupe-bunker/backend-leads
+static/         @lataupe-bunker/frontend-guild
+Dockerfile      @lataupe-bunker/devops
+k8s-deployment.yaml @lataupe-bunker/devops
+SECURITY.md     @lataupe-bunker/security-office
+artifacts/      @lataupe-bunker/architecture-council
