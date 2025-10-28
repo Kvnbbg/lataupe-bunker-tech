@@ -345,7 +345,7 @@ if __name__ == '__main__':
     
     # Démarrer l'application
     if config_name == 'development':
-        app.run(host='0.0.0.0', port=5001, debug=True)
+        app.run(host='0.0.0.0', port=5001)
     else:
         # En production, utiliser Gunicorn
         app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))
