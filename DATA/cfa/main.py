@@ -3,7 +3,7 @@ import sys
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, abort
 from flask_cors import CORS
 from src.models import db
 from src.models.user import user_bp
@@ -63,12 +63,25 @@ def create_app():
         if static_folder_path is None:
             return "Static folder not configured", 404
 
-        if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
-            return send_from_directory(static_folder_path, path)
+        # Normalize and validate the user path to prevent directory traversal
+        # Get absolute path of static folder
+        abs_static_folder = os.path.abspath(static_folder_path)
+        # Normalize and join user-provided path
+        safe_path = os.path.normpath(path)
+        requested_file = os.path.abspath(os.path.join(abs_static_folder, safe_path))
+
+        # Ensure requested_file is within abs_static_folder
+        if not requested_file.startswith(abs_static_folder + os.sep) and requested_file != abs_static_folder:
+            return abort(403)
+
+        if path != "" and os.path.exists(requested_file):
+            # Serve the requested file
+            # Using safe_path instead of unchecked `path`
+            return send_from_directory(abs_static_folder, safe_path)
         else:
-            index_path = os.path.join(static_folder_path, 'index.html')
+            index_path = os.path.join(abs_static_folder, 'index.html')
             if os.path.exists(index_path):
-                return send_from_directory(static_folder_path, 'index.html')
+                return send_from_directory(abs_static_folder, 'index.html')
             else:
                 return "index.html not found", 404
     
