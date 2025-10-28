@@ -58,6 +58,7 @@ The following artifacts have been generated to operationalize the roadmap:
 | Artifact | Description |
 | --- | --- |
 | `artifacts/ci/github-actions.yml` | CI pipeline implementing linting, testing, SAST, and container build with SBOM generation. |
+| `artifacts/security/codeql-advanced-setup.md` | Implementation notes for the repository's advanced CodeQL configuration. |
 | `artifacts/security/CODEOWNERS` | Ownership matrix ensuring expert reviews across critical areas. |
 | `artifacts/security/branch-protection-policy.md` | Guardrails for protected branches, review gates, and commit integrity. |
 | `artifacts/security/secrets-management-plan.md` | HashiCorp Vault adoption plan with developer workflow guidance. |
