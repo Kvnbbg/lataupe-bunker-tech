@@ -8,22 +8,46 @@ import os
 import secrets
 import shutil
 from pathlib import Path
+from cryptography.fernet import Fernet
+import base64
 
 def generate_secure_secret_key():
     """Génère une clé secrète cryptographiquement sécurisée"""
     return secrets.token_urlsafe(32)
 
+def get_env_encryption_key():
+    """
+    Génère ou récupère une clé d'encryption pour les secrets stockés dans .env.
+    En production, ce devrait être stocké de façon sécurisée séparément !
+    """
+    # Pour cette démonstration, génère juste une clé nouvelle chaque fois.
+    # En production, fournir une méthode sûre pour stocker ou récupérer la clé.
+    return Fernet.generate_key()
+
+def encrypt_secret(secret, fernet_key):
+    """
+    Chiffre le secret à l'aide de Fernet (AES-128)
+    """
+    f = Fernet(fernet_key)
+    token = f.encrypt(secret.encode())
+    # Pour le stockage dans .env, encode en base64 ASCII :
+    return base64.urlsafe_b64encode(token).decode()
+
 def create_secure_env_file(project_path):
     """Crée un fichier .env sécurisé"""
+    fernet_key = get_env_encryption_key()
+    encrypted_secret_key = encrypt_secret(generate_secure_secret_key(), fernet_key)
+    encrypted_jwt_secret_key = encrypt_secret(generate_secure_secret_key(), fernet_key)
     env_content = f"""# Configuration sécurisée pour Lataupe Bunker Tech
-SECRET_KEY={generate_secure_secret_key()}
+SECRET_KEY={encrypted_secret_key}
 FLASK_ENV=production
 FLASK_DEBUG=False
 DATABASE_URL=sqlite:///bunker.db
 SESSION_COOKIE_SECURE=True
 SESSION_COOKIE_HTTPONLY=True
 SESSION_COOKIE_SAMESITE=Strict
-JWT_SECRET_KEY={generate_secure_secret_key()}
+JWT_SECRET_KEY={encrypted_jwt_secret_key}
+ENCRYPTION_KEY={fernet_key.decode()}
 
 # Configuration de sécurité
 BCRYPT_LOG_ROUNDS=12
