@@ -114,15 +114,15 @@ def create_app():
             db.session.execute('SELECT 1')
             db_status = 'healthy'
         except Exception as e:
-            db_status = f'unhealthy: {str(e)}'
-        
+            logging.error(f"Database health check failed: {e}")
+            db_status = 'unhealthy'
         # Vérifier le cache
         try:
             cache.set('health_check', 'ok', timeout=10)
             cache_status = 'healthy' if cache.get('health_check') == 'ok' else 'unhealthy'
         except Exception as e:
-            cache_status = f'unhealthy: {str(e)}'
-        
+            logging.error(f"Cache health check failed: {e}")
+            cache_status = 'unhealthy'
         status = {
             'status': 'healthy' if db_status == 'healthy' else 'unhealthy',
             'timestamp': datetime.utcnow().isoformat(),
