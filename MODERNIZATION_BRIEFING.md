@@ -9,14 +9,14 @@
 - **Deployment assets**: Presence of `Dockerfile`, `docker-compose.yml`, `k8s-deployment.yaml`, and Railway scripts demonstrates intent to support multiple deployment targets, yet there is no automation tying these assets together.
 
 ### 1.2 Delivery Tooling & Processes
-- **CI/CD**: No pipeline configurations or GitHub Actions workflows exist; deployments are manual or scripted via shell utilities (`deploy-k8s.sh`, `deployment_automation.py`).
+- **CI/CD**: A comprehensive CI blueprint lives in `artifacts/ci/github-actions.yml`, while the repository now ships an advanced CodeQL workflow under `.github/workflows/codeql.yml` to bootstrap automated security scanning. Broader build/test automation remains to be activated.
 - **Testing**: Pytest-based suites (`test_api.py`, `test_models.py`, `testing_documentation_suite.py`) are present but not automated; coverage expectations are unspecified.
 - **Documentation**: README highlights SQLite-backed MVP and outlines architecture, but living documentation mechanisms (ADR, API specs) are absent.
 
 ### 1.3 Security & Compliance Posture
 - **Secrets**: `.env.example` suggests environment-based secret management with no centralized vault. Scripts risk leaking secrets during deployments.
 - **Dependency Governance**: `requirements.txt` pins some packages but lacks dedicated tooling for vulnerability scanning or updates.
-- **Operational Security**: `SECURITY.md` provides guidance but no enforcement; branch protection, signed commits, or CODEOWNERS are not configured.
+- **Operational Security**: `SECURITY.md` provides guidance but no enforcement; branch protection, signed commits, or CODEOWNERS are not configured. A dedicated CodeQL workflow exists but requires integration into branch protections to be fully effective.
 
 ### 1.4 Observability & Operations
 - Logging strategy relies on ad-hoc log files checked into the repo (e.g., `bunker_system.log`). No mention of metrics, distributed tracing, or structured logging pipelines.
@@ -85,3 +85,13 @@ The following artifacts have been generated to operationalize the roadmap:
 ---
 
 Ownership for this briefing and associated artifacts: `@lataupe-bunker/architecture-council`.
+
+## 6. Execution Tracking — Project Velocity
+
+To operationalize the roadmap, the Quantum Engineering Agent has decomposed the Expansion Blueprint into an actionable delivery sequence. The first iteration is detailed in `artifacts/planning/sprint-1-execution-plan.md` and establishes:
+
+- **Sprint 1 Objective:** Ship CI/CD activation, telemetry instrumentation, adaptive alert triage, and responsive dashboard updates within a two-week cadence.
+- **Feedback Loop:** Prometheus and OpenTelemetry metrics paired with DORA telemetry to guide go/no-go decisions and backlog reprioritization.
+- **Exit Criteria:** Definitions of Done across feature, optimization, UI/UX, and deployment tracks plus review artifacts that seed Sprint 2 planning.
+
+Subsequent sprint plans will evolve within the same directory, ensuring the modernization briefing remains the canonical pointer to execution state.
