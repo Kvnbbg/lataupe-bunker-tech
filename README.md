@@ -61,7 +61,7 @@ Lataupe Bunker Tech est une application web moderne conçue pour la surveillance
 ```bash
 # 1. Cloner ou télécharger le projet
 git clone <repository-url>
-cd lataupe-bunker-tech-mvp/bunker-tech-app
+cd lataupe-bunker-tech
 
 # 2. Créer un environnement virtuel
 python3.11 -m venv venv
@@ -76,7 +76,7 @@ cp .env.example .env
 # Éditer .env selon vos besoins
 
 # 5. Démarrer l'application
-python src/main.py
+python run.py
 ```
 
 L'application sera accessible à l'adresse : `http://localhost:5001`
@@ -90,22 +90,39 @@ L'application sera accessible à l'adresse : `http://localhost:5001`
 ## 🏗️ Architecture
 
 ```
-src/
-├── main.py              # Point d'entrée de l'application
-├── models/              # Modèles de données SQLAlchemy
-│   ├── user.py         # Modèles utilisateur de base
-│   └── bunker.py       # Modèles spécifiques au bunker
-├── routes/              # Blueprints Flask
-│   ├── auth.py         # Authentification
-│   ├── dashboard.py    # Tableau de bord
-│   └── emergency.py    # Messages d'urgence
-├── services/            # Services métier
-│   ├── data_simulator.py    # Simulation de données
-│   └── message_sender.py    # Envoi de messages
-└── static/              # Ressources statiques
-    ├── index.html      # Interface utilisateur
-    └── app.js          # Logique JavaScript
+lataupe-bunker-tech/
+├── app/
+│   ├── __init__.py          # Factory create_app
+│   ├── config.py            # Configuration (SQLite pour le MVP)
+│   ├── models.py            # Modèles SQLAlchemy
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── auth.py          # Authentification
+│   │   ├── dashboard.py     # Tableau de bord
+│   │   └── alerts.py        # Alertes et communications d'urgence
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── data_simulator.py  # Génération de données
+│   │   └── message_sender.py  # Simulation d'envoi de messages
+│   └── templates/
+│       ├── base.html
+│       ├── auth/login.html
+│       ├── dashboard/index.html
+│       └── alerts/index.html
+├── static/
+│   ├── css/style.css        # Styles (ex. Tailwind compilé)
+│   ├── js/main.js           # Logique front-end
+│   └── img/logo.png
+├── tests/
+│   ├── test_auth.py
+│   ├── test_dashboard.py
+│   └── test_api.py
+├── run.py                   # Point d'entrée (create_app)
+├── requirements.txt
+└── README.md
 ```
+
+> ℹ️ **MVP vs Production** : Le MVP s'appuie sur SQLite (`sqlite:///bunker.db`) pour accélérer le développement. La migration vers PostgreSQL est planifiée pour l'environnement de production.
 
 ## 🔧 Configuration
 
@@ -158,17 +175,15 @@ Pour un déploiement en production :
 
 - `POST /api/dashboard/environmental-data/generate` - Générer données test
 
-### Alertes
+### Alertes & Communications d'Urgence
 
-- `GET /api/dashboard/alerts/active` - Alertes actives
+- `GET /api/alerts/active` - Alertes actives
 
-- `POST /api/dashboard/alerts/{id}/resolve` - Résoudre alerte
+- `POST /api/alerts/{id}/resolve` - Résoudre une alerte
 
-### Messages d'Urgence
+- `GET /api/alerts/messages` - Historique des messages envoyés
 
-- `GET /api/emergency/messages` - Historique messages
-
-- `POST /api/emergency/messages` - Envoyer message
+- `POST /api/alerts/messages` - Envoyer un message d'urgence
 
 ## 🧪 Tests et Développement
 
@@ -231,10 +246,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY src/ ./src/
+COPY app/ ./app/
+COPY run.py .
 EXPOSE 5001
 
-CMD ["python", "src/main.py"]
+CMD ["python", "run.py"]
 ```
 
 ### Déploiement Cloud
@@ -292,13 +308,13 @@ L'architecture permet l'intégration facile de :
 
 ## 📚 Documentation
 
-- [Guide Complet](../guide_complet_lataupe_bunker_tech.md) - Documentation détaillée
+- [Guide Complet du MVP](<DATA/Guide Complet du MVP Lataupe Bunker Tech _ Application Flask de Surveillance Environnementale.md>) - Documentation détaillée
 
-- [Architecture](../flask_mvp_architecture.md) - Conception technique
+- [Conception de l'Architecture](<DATA/Conception de l'Architecture de l'Application Flask pour le MVP Lataupe-Bunker-Tech.md>) - Structure et décisions techniques
 
-- [API Documentation](api-docs.md) - Référence API complète
+- [Guide d'Intégration d'API](<DATA/Guide d'Intégration d'API - Lataupe Bunker Tech.md>) - Intégrations externes planifiées
 
-- [Sécurité](security.md) - Guide de sécurité
+- [Sécurité](SECURITY.md) - Guide de sécurité
 
 ## 🤝 Contribution
 
@@ -316,13 +332,13 @@ Les contributions sont les bienvenues ! Veuillez :
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est distribué sous licence Mozilla Public License 2.0. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ## 🆘 Support
 
 Pour obtenir de l'aide :
 
-- 📖 Consultez la [documentation complète](../guide_complet_lataupe_bunker_tech.md)
+- 📖 Consultez la [documentation complète](<DATA/Guide Complet du MVP Lataupe Bunker Tech _ Application Flask de Surveillance Environnementale.md>)
 
 - 🐛 Signalez les bugs via les Issues GitHub
 
